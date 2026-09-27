@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+
+{% block title %}Order History &amp; Reorder – SmartShop{% endblock %}
+
+{% block content %}
+<div class="container mb-5">
+  <!-- Page Header -->
+  <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between mb-4 pb-3 border-bottom gap-3">
+    <div>
+      <div class="d-flex align-items-center gap-2 mb-1">
+        <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-3 py-1 font-mono">
+          <i class="bi bi-clock-history me-1"></i> PURCHASE HISTORY
+        </span>
+      </div>
+      <h2 class="fw-bold mb-0">My Orders &amp; Past Transactions</h2>
+      <p class="text-muted small mb-0">Review past purchases and use the <strong>Buy Again</strong> feature to re-add products to your cart.</p>
+    </div>
+
+    <a href="{{ url_for('products_list') }}" class="btn btn-primary-custom rounded-pill px-4">
+      <i class="bi bi-bag-plus me-1"></i> Browse Catalog
+    </a>
+  </div>
+
+  {% if orders %}
+    <div class="card border-0 shadow-sm rounded-4 bg-white p-4">
+      <div class="table-responsive">
+        <table class="table custom-table">
+          <thead>
+            <tr>
+              <th>Order ID</th>
+              <th>Date</th>
+              <th>Items Purchased</th>
+              <th>Total Amount</th>
+              <th>Payment</th>
+              <th>Status</th>
+              <th class="text-end">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for order in orders %}
+              <tr>
+                <td class="font-mono fw-bold text-primary">#TX-{{ "%05d"|format(order.id) }}</td>
+                <td class="small text-muted">{{ order.created_at[:16] }}</td>
+                <td class="small">
+                  <div class="fw-bold text-dark">{{ order.item_names or 'Products' }}</div>
+                  <div class="d-flex align-items-center gap-2 mt-1">
+                    <span class="badge bg-light text-secondary border font-mono small">{{ order.item_count }} item(s)</span>
+                    <a href="{{ url_for('buy_again', tx_id=order.id) }}" class="text-primary text-decoration-none small fw-semibold">
+                      <i class="bi bi-cart-plus me-1"></i> Quick Add to Cart
+                    </a>
+                  </div>
+                </td>
+                <td class="fw-extrabold text-dark fs-6">${{ "%.2f"|format(order.total_amount) }}</td>
+                <td class="small text-muted">{{ order.payment_method }}</td>
+                <td>
+                  <span class="badge bg-success-subtle text-success border border-success-subtle px-2 py-1">
+                    <i class="bi bi-check2-circle me-1"></i> {{ order.status }}
+                  </span>
+                </td>
+                <td class="text-end">
+                  <div class="d-inline-flex gap-2">
+                    <a href="{{ url_for('order_success', tx_id=order.id) }}" class="btn btn-sm btn-outline-secondary rounded-pill px-3" title="View receipt & post-purchase recommendations">
+                      <i class="bi bi-receipt me-1"></i> Receipt
+                    </a>
+                    <!-- Add to Cart (Buy Again) Button -->
+                    <a href="{{ url_for('buy_again', tx_id=order.id) }}" class="btn btn-sm btn-primary-custom rounded-pill px-3" title="Re-add all items from this order into your cart">
+                      <i class="bi bi-cart-plus me-1"></i> Add to Cart
+                    </a>
+                  </div>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  {% else %}
+    <div class="text-center py-5 bg-white rounded-4 border p-5">
+      <div class="stat-icon bg-light text-muted mx-auto mb-3" style="width: 80px; height: 80px; font-size: 2.5rem;">
+        <i class="bi bi-receipt"></i>
+      </div>
+      <h3 class="fw-bold text-dark">No Orders Found</h3>
+      <p class="text-muted small mb-4">Complete a demo purchase through the catalog to view your order history and test the post-purchase recommendation engine.</p>
+      <a href="{{ url_for('products_list') }}" class="btn btn-primary-custom rounded-pill px-4 py-2">
+        <i class="bi bi-bag-plus me-2"></i> Start Shopping
+      </a>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

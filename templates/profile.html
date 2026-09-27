@@ -1,0 +1,197 @@
+{% extends 'base.html' %}
+
+{% block title %}My Profile – SmartShop{% endblock %}
+
+{% block content %}
+<div class="container mb-5">
+  <div class="row g-4">
+    <!-- User Info Card -->
+    <div class="col-lg-4">
+      <div class="card border-0 shadow-sm rounded-4 p-4 bg-white text-center mb-4">
+        <div class="brand-icon mx-auto mb-3" style="width: 70px; height: 70px; font-size: 2rem;">
+          <i class="bi bi-person-circle"></i>
+        </div>
+        <h4 class="fw-bold text-dark mb-1">{{ user.name }}</h4>
+        <p class="text-muted small mb-3">{{ user.email }}</p>
+
+        {% if user.is_admin %}
+          <span class="badge bg-danger rounded-pill px-3 py-1 mb-3">Administrator</span>
+        {% else %}
+          <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill px-3 py-1 mb-3">Customer</span>
+        {% endif %}
+
+        <div class="text-start p-3 bg-light rounded-3 border small">
+          <div class="d-flex justify-content-between mb-2">
+            <span class="text-muted">Account ID:</span>
+            <span class="fw-bold font-mono">#USR-{{ "%04d"|format(user.id) }}</span>
+          </div>
+          <div class="d-flex justify-content-between mb-2">
+            <span class="text-muted">Member Since:</span>
+            <span class="fw-bold">{{ user.created_at[:10] }}</span>
+          </div>
+          <div class="d-flex justify-content-between">
+            <span class="text-muted">Total Orders:</span>
+            <span class="fw-bold text-primary">{{ orders|length }}</span>
+          </div>
+        </div>
+
+        {% if user.is_admin %}
+          <a href="{{ url_for('admin_panel') }}" class="btn btn-outline-danger w-100 rounded-pill mt-3 fw-semibold">
+            <i class="bi bi-shield-lock me-1"></i> Open Admin Panel
+          </a>
+        {% endif %}
+      </div>
+
+      <!-- Personalized Affinity Analysis -->
+      <div class="card border-0 shadow-sm rounded-4 p-4 bg-white">
+        <div class="d-flex align-items-center gap-2 mb-2">
+          <span class="badge bg-purple-subtle text-purple border font-mono small" style="background:#f3e8ff; color:#7e22ce;">
+            <i class="bi bi-person-check-fill me-1"></i> USER MODEL
+          </span>
+        </div>
+        <h5 class="fw-bold mb-2">Shopping Affinity</h5>
+        <p class="text-muted small mb-3">Calculated from your viewed products and checkout patterns to personalize recommendations.</p>
+        
+        <div class="p-3 bg-light rounded-3 border small">
+          <div class="d-flex justify-content-between mb-1">
+            <span class="text-muted">Dominant Interest:</span>
+            <span class="fw-bold text-dark">{{ top_interest or 'Electronics & Accessories' }}</span>
+          </div>
+          <div class="d-flex justify-content-between">
+            <span class="text-muted">Interaction Status:</span>
+            <span class="text-success fw-bold"><i class="bi bi-activity"></i> Active Profile</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Orders & Activity -->
+    <div class="col-lg-8">
+      <!-- Order History -->
+      <div class="card border-0 shadow-sm rounded-4 p-4 bg-white mb-4">
+        <div class="d-flex align-items-center justify-content-between mb-3 border-bottom pb-2">
+          <h4 class="fw-bold mb-0"><i class="bi bi-clock-history me-2 text-primary"></i> Order History</h4>
+          <span class="badge bg-light text-dark border">{{ orders|length }} Transactions</span>
+        </div>
+
+        {% if orders %}
+          <div class="table-responsive">
+            <table class="table custom-table">
+              <thead>
+                <tr>
+                  <th>Order #</th>
+                  <th>Date</th>
+                  <th>Items Purchased</th>
+                  <th>Total</th>
+                  <th>Payment</th>
+                  <th>Status</th>
+                  <th class="text-end">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for order in orders %}
+                  <tr>
+                    <td class="font-mono fw-bold text-primary">#TX-{{ "%05d"|format(order.id) }}</td>
+                    <td class="small text-muted">{{ order.created_at[:16] }}</td>
+                    <td class="small">
+                      <div class="fw-semibold text-dark">{{ order.item_names }}</div>
+                      <div class="text-muted">{{ order.item_count }} item(s)</div>
+                    </td>
+                    <td class="fw-bold text-dark">${{ "%.2f"|format(order.total_amount) }}</td>
+                    <td class="small">{{ order.payment_method }}</td>
+                    <td><span class="badge bg-success-subtle text-success border border-success-subtle">{{ order.status }}</span></td>
+                    <td class="text-end">
+                      <div class="d-inline-flex gap-1">
+                        <a href="{{ url_for('order_success', tx_id=order.id) }}" class="btn btn-sm btn-outline-secondary rounded-pill px-2 py-1" title="View Order Receipt">
+                          <i class="bi bi-receipt"></i>
+                        </a>
+                        <a href="{{ url_for('buy_again', tx_id=order.id) }}" class="btn btn-sm btn-primary-custom rounded-pill px-3 py-1" title="Add all items from this order into your cart">
+                          <i class="bi bi-cart-plus me-1"></i> Add to Cart
+                        </a>
+                      </div>
+                    </td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        {% else %}
+          <div class="text-center py-4 text-muted small">
+            <i class="bi bi-cart-x fs-3 d-block mb-2"></i>
+            No previous orders found for this account.
+          </div>
+        {% endif %}
+      </div>
+
+      <!-- Because You Bought Personalized Recommendations -->
+      {% if because_you_bought_product and because_you_bought_recs %}
+        <div class="card border-0 shadow-sm rounded-4 p-4 bg-white mb-4">
+          <div class="d-flex align-items-center justify-content-between mb-3 border-bottom pb-2">
+            <div>
+              <div class="d-flex align-items-center gap-2 mb-1">
+                <span class="badge bg-purple-subtle text-purple border font-mono small" style="background:#f3e8ff; color:#7e22ce;">
+                  <i class="bi bi-cpu-fill me-1"></i> APRIORI MINING
+                </span>
+                <span class="badge bg-success-subtle text-success border border-success-subtle font-mono small">
+                  📊 Recommended based on shopping patterns
+                </span>
+              </div>
+              <h5 class="fw-bold mb-0">🛍️ Because You Bought <span class="text-primary">{{ because_you_bought_product }}</span></h5>
+            </div>
+          </div>
+
+          <div class="row g-3">
+            {% for rec in because_you_bought_recs %}
+              <div class="col-sm-6 col-md-6 col-xl-3">
+                <div class="product-card h-100 border">
+                  <div class="product-card-img-wrap" style="height: 140px;">
+                    <img src="{{ rec.image }}" alt="{{ rec.name }}" class="product-card-img">
+                  </div>
+                  <div class="product-card-body p-2 d-flex flex-column justify-content-between">
+                    <div>
+                      {% if rec.confidence and rec.lift %}
+                        <div class="d-flex gap-1 mb-1 font-mono" style="font-size: 0.65rem;">
+                          <span class="badge bg-success-subtle text-success border">Conf: {{ "%.0f"|format(rec.confidence * 100) }}%</span>
+                          <span class="badge bg-purple-subtle text-purple border" style="background:#f3e8ff; color:#7e22ce;">Lift: {{ "%.2f"|format(rec.lift) }}x</span>
+                        </div>
+                      {% endif %}
+                      <h6 class="fw-bold mb-1 small text-truncate">{{ rec.name }}</h6>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center mt-2 pt-2 border-top">
+                      <span class="fw-bold text-primary small">${{ "%.2f"|format(rec.price) }}</span>
+                      <button class="btn btn-sm btn-primary-custom rounded-pill px-2 py-0" onclick="addToCart({{ rec.id }}, 1, event)">
+                        <i class="bi bi-cart-plus"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      {% endif %}
+
+      <!-- Recently Viewed Products -->
+      {% if recent_views %}
+        <div class="card border-0 shadow-sm rounded-4 p-4 bg-white">
+          <h5 class="fw-bold mb-3"><i class="bi bi-eye me-2 text-primary"></i> Recently Viewed Items</h5>
+          <div class="row g-3">
+            {% for item in recent_views %}
+              <div class="col-sm-6 col-md-4">
+                <div class="p-3 border rounded-3 bg-light text-center h-100 d-flex flex-column justify-content-between">
+                  <div>
+                    <img src="{{ item.image }}" alt="{{ item.name }}" style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px;" class="mb-2">
+                    <h6 class="fw-bold mb-1 small text-truncate">{{ item.name }}</h6>
+                    <div class="text-primary fw-bold small mb-2">${{ "%.2f"|format(item.price) }}</div>
+                  </div>
+                  <a href="{{ url_for('product_detail', product_id=item.id) }}" class="btn btn-sm btn-outline-primary rounded-pill w-100">View Again</a>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

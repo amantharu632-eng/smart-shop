@@ -1,0 +1,379 @@
+{% extends 'base.html' %}
+
+{% block title %}Admin Panel – SmartShop{% endblock %}
+
+{% block content %}
+<div class="container mb-5">
+  <!-- Admin Header -->
+  <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between mb-4 pb-3 border-bottom gap-3">
+    <div>
+      <div class="d-flex align-items-center gap-2 mb-1">
+        <span class="badge bg-danger rounded-pill px-3 py-1 font-mono">
+          <i class="bi bi-shield-lock-fill me-1"></i> ADMIN CONSOLE
+        </span>
+      </div>
+      <h2 class="fw-bold mb-0">SmartShop Administration &amp; Model Operations</h2>
+    </div>
+
+    <!-- Regenerate Recommendation Rules Button in Header -->
+    <button type="button" class="btn btn-primary-custom" data-bs-toggle="modal" data-bs-target="#retrainModal">
+      <i class="bi bi-arrow-repeat me-1"></i> 🔄 Regenerate Recommendation Rules
+    </button>
+  </div>
+
+  <!-- Navigation Tabs -->
+  <ul class="nav nav-pills mb-4 gap-2" id="adminTabs" role="tablist">
+    <li class="nav-item" role="presentation">
+      <button class="nav-link active rounded-pill px-4" id="products-tab" data-bs-toggle="pill" data-bs-target="#products-pane" type="button" role="tab">
+        <i class="bi bi-box-seam me-1"></i> Products ({{ products|length }})
+      </button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link rounded-pill px-4" id="transactions-tab" data-bs-toggle="pill" data-bs-target="#transactions-pane" type="button" role="tab">
+        <i class="bi bi-receipt me-1"></i> Transactions ({{ transactions|length }})
+      </button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link rounded-pill px-4" id="users-tab" data-bs-toggle="pill" data-bs-target="#users-pane" type="button" role="tab">
+        <i class="bi bi-people me-1"></i> Users ({{ users|length }})
+      </button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link rounded-pill px-4" id="rules-tab" data-bs-toggle="pill" data-bs-target="#rules-pane" type="button" role="tab">
+        <i class="bi bi-cpu me-1"></i> Model Rules ({{ rules_count }})
+      </button>
+    </li>
+  </ul>
+
+  <!-- Tab Content -->
+  <div class="tab-content" id="adminTabsContent">
+    <!-- TAB 1: Products Management -->
+    <div class="tab-pane fade show active" id="products-pane" role="tabpanel">
+      <div class="card border-0 shadow-sm rounded-4 p-4 bg-white">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h5 class="fw-bold mb-0">Store Catalog Management</h5>
+          <button class="btn btn-sm btn-primary-custom rounded-pill" data-bs-toggle="modal" data-bs-target="#addProductModal">
+            <i class="bi bi-plus-lg me-1"></i> Add New Product
+          </button>
+        </div>
+
+        <div class="table-responsive">
+          <table class="table custom-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Product</th>
+                <th>Category</th>
+                <th>Price</th>
+                <th>Rating</th>
+                <th>Stock</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for p in products %}
+                <tr>
+                  <td class="font-mono text-muted small">#{{ p.id }}</td>
+                  <td>
+                    <div class="d-flex align-items-center gap-2">
+                      <img src="{{ p.image }}" alt="{{ p.name }}" style="width: 38px; height: 38px; object-fit: cover; border-radius: 6px;">
+                      <span class="fw-semibold text-dark">{{ p.name }}</span>
+                    </div>
+                  </td>
+                  <td><span class="badge bg-light text-dark border">{{ p.category }}</span></td>
+                  <td class="fw-bold text-primary">${{ "%.2f"|format(p.price) }}</td>
+                  <td><i class="bi bi-star-fill text-warning me-1"></i>{{ p.rating }}</td>
+                  <td>
+                    <span class="badge {% if p.stock > 10 %}bg-success-subtle text-success{% else %}bg-danger-subtle text-danger{% endif %} border">
+                      {{ p.stock }} left
+                    </span>
+                  </td>
+                  <td>
+                    <div class="d-flex gap-1">
+                      <!-- Edit Modal Trigger -->
+                      <button class="btn btn-xs btn-outline-secondary rounded-pill px-2 py-1 small" data-bs-toggle="modal" data-bs-target="#editModal{{ p.id }}">
+                        <i class="bi bi-pencil"></i>
+                      </button>
+
+                      <!-- Delete Form -->
+                      <form action="{{ url_for('admin_delete_product', product_id=p.id) }}" method="POST" onsubmit="return confirm('Delete {{ p.name }}? This will also remove associated transaction items.');" class="d-inline">
+                        <button type="submit" class="btn btn-xs btn-outline-danger rounded-pill px-2 py-1 small">
+                          <i class="bi bi-trash3"></i>
+                        </button>
+                      </form>
+                    </div>
+
+                    <!-- Edit Product Modal -->
+                    <div class="modal fade" id="editModal{{ p.id }}" tabindex="-1" aria-hidden="true">
+                      <div class="modal-dialog">
+                        <div class="modal-content rounded-4 border-0 shadow">
+                          <div class="modal-header">
+                            <h5 class="modal-title fw-bold">Edit Product #{{ p.id }}</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                          </div>
+                          <form action="{{ url_for('admin_edit_product', product_id=p.id) }}" method="POST">
+                            <div class="modal-body">
+                              <div class="mb-3">
+                                <label class="form-label small fw-bold">Product Name</label>
+                                <input type="text" name="name" class="form-control" value="{{ p.name }}" required>
+                              </div>
+                              <div class="row g-2 mb-3">
+                                <div class="col-6">
+                                  <label class="form-label small fw-bold">Category</label>
+                                  <select name="category" class="form-select">
+                                    {% for cat in ['Electronics', 'Accessories', 'Home', 'Fashion'] %}
+                                      <option value="{{ cat }}" {% if p.category == cat %}selected{% endif %}>{{ cat }}</option>
+                                    {% endfor %}
+                                  </select>
+                                </div>
+                                <div class="col-6">
+                                  <label class="form-label small fw-bold">Price ($)</label>
+                                  <input type="number" step="0.01" name="price" class="form-control" value="{{ p.price }}" required>
+                                </div>
+                              </div>
+                              <div class="row g-2 mb-3">
+                                <div class="col-6">
+                                  <label class="form-label small fw-bold">Stock</label>
+                                  <input type="number" name="stock" class="form-control" value="{{ p.stock }}" required>
+                                </div>
+                                <div class="col-6">
+                                  <label class="form-label small fw-bold">Rating</label>
+                                  <input type="number" step="0.1" max="5.0" min="1.0" name="rating" class="form-control" value="{{ p.rating }}" required>
+                                </div>
+                              </div>
+                              <div class="mb-3">
+                                <label class="form-label small fw-bold">Image URL</label>
+                                <input type="url" name="image" class="form-control" value="{{ p.image }}">
+                              </div>
+                              <div class="mb-3">
+                                <label class="form-label small fw-bold">Description</label>
+                                <textarea name="description" class="form-control" rows="3">{{ p.description }}</textarea>
+                              </div>
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-light rounded-pill" data-bs-dismiss="modal">Cancel</button>
+                              <button type="submit" class="btn btn-primary rounded-pill">Save Changes</button>
+                            </div>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 2: Transactions Management -->
+    <div class="tab-pane fade" id="transactions-pane" role="tabpanel">
+      <div class="card border-0 shadow-sm rounded-4 p-4 bg-white">
+        <h5 class="fw-bold mb-3">All Customer Transactions ({{ transactions|length }})</h5>
+        <div class="table-responsive">
+          <table class="table custom-table">
+            <thead>
+              <tr>
+                <th>Order #</th>
+                <th>User</th>
+                <th>Items Purchased</th>
+                <th>Total</th>
+                <th>Payment</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for t in transactions %}
+                <tr>
+                  <td class="font-mono fw-bold text-primary">#TX-{{ "%05d"|format(t.id) }}</td>
+                  <td class="small fw-semibold">{{ t.user_name or 'Guest / Seeder' }}</td>
+                  <td class="small">{{ t.item_names or 'Multiple Items' }}</td>
+                  <td class="fw-bold text-dark">${{ "%.2f"|format(t.total_amount) }}</td>
+                  <td class="small">{{ t.payment_method }}</td>
+                  <td class="small text-muted">{{ t.created_at[:16] }}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 3: Users Management -->
+    <div class="tab-pane fade" id="users-pane" role="tabpanel">
+      <div class="card border-0 shadow-sm rounded-4 p-4 bg-white">
+        <h5 class="fw-bold mb-3">Registered Users ({{ users|length }})</h5>
+        <div class="table-responsive">
+          <table class="table custom-table">
+            <thead>
+              <tr>
+                <th>User ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Registered At</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for u in users %}
+                <tr>
+                  <td class="font-mono text-muted small">#USR-{{ "%04d"|format(u.id) }}</td>
+                  <td class="fw-semibold text-dark">{{ u.name }}</td>
+                  <td class="small">{{ u.email }}</td>
+                  <td>
+                    {% if u.is_admin %}
+                      <span class="badge bg-danger">Admin</span>
+                    {% else %}
+                      <span class="badge bg-primary-subtle text-primary border border-primary-subtle">Customer</span>
+                    {% endif %}
+                  </td>
+                  <td class="small text-muted">{{ u.created_at[:10] }}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 4: Model Rules & Generation -->
+    <div class="tab-pane fade" id="rules-pane" role="tabpanel">
+      <div class="card border-0 shadow-sm rounded-4 p-4 bg-white">
+        <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
+          <div>
+            <h5 class="fw-bold mb-1">Apriori Recommendation Model Controls</h5>
+            <p class="text-muted small mb-0">Re-mine frequent itemsets directly from the SQLite transactions table</p>
+          </div>
+          <button class="btn btn-primary-custom" data-bs-toggle="modal" data-bs-target="#retrainModal">
+            <i class="bi bi-play-circle-fill me-1"></i> Run Apriori Pipeline
+          </button>
+        </div>
+
+        <div class="row g-4 mb-4">
+          <div class="col-md-4">
+            <div class="p-3 bg-light rounded-3 border text-center">
+              <span class="small text-muted d-block">Active Mined Rules</span>
+              <span class="fw-extrabold text-primary fs-3">{{ rules_count }}</span>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="p-3 bg-light rounded-3 border text-center">
+              <span class="small text-muted d-block">Mining Algorithm</span>
+              <span class="fw-bold text-dark fs-5 font-mono">Mlxtend &bull; Apriori</span>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="p-3 bg-light rounded-3 border text-center">
+              <span class="small text-muted d-block">Default Min Support / Conf</span>
+              <span class="fw-bold text-success fs-5 font-mono">0.03 / 0.15</span>
+            </div>
+          </div>
+        </div>
+
+        <a href="{{ url_for('rules_table') }}" class="btn btn-outline-primary rounded-pill">
+          View Complete Association Rules Table &rarr;
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Add New Product -->
+<div class="modal fade" id="addProductModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content rounded-4 border-0 shadow">
+      <div class="modal-header">
+        <h5 class="modal-title fw-bold">Add New Store Product</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <form action="{{ url_for('admin_add_product') }}" method="POST">
+        <div class="modal-body">
+          <div class="mb-3">
+            <label class="form-label small fw-bold">Product Name *</label>
+            <input type="text" name="name" class="form-control" placeholder="e.g. Wireless Ergonomic Trackball" required>
+          </div>
+          <div class="row g-2 mb-3">
+            <div class="col-6">
+              <label class="form-label small fw-bold">Category *</label>
+              <select name="category" class="form-select">
+                <option value="Electronics">Electronics</option>
+                <option value="Accessories">Accessories</option>
+                <option value="Home">Home</option>
+                <option value="Fashion">Fashion</option>
+              </select>
+            </div>
+            <div class="col-6">
+              <label class="form-label small fw-bold">Price ($) *</label>
+              <input type="number" step="0.01" name="price" class="form-control" placeholder="49.99" required>
+            </div>
+          </div>
+          <div class="row g-2 mb-3">
+            <div class="col-6">
+              <label class="form-label small fw-bold">Initial Stock</label>
+              <input type="number" name="stock" class="form-control" value="50" required>
+            </div>
+            <div class="col-6">
+              <label class="form-label small fw-bold">Rating</label>
+              <input type="number" step="0.1" max="5.0" min="1.0" name="rating" class="form-control" value="4.7" required>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label small fw-bold">Image URL (Unsplash or direct link)</label>
+            <input type="url" name="image" class="form-control" placeholder="https://images.unsplash.com/photo-...">
+          </div>
+          <div class="mb-3">
+            <label class="form-label small fw-bold">Description</label>
+            <textarea name="description" class="form-control" rows="3" placeholder="Provide product features..."></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-light rounded-pill" data-bs-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-primary rounded-pill">Create Product</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Retrain Apriori Model -->
+<div class="modal fade" id="retrainModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content rounded-4 border-0 shadow">
+      <div class="modal-header">
+        <h5 class="modal-title fw-bold"><i class="bi bi-cpu text-primary me-2"></i> 🔄 Regenerate Recommendation Rules</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <form action="{{ url_for('generate_rules_post') }}" method="POST">
+        <div class="modal-body">
+          <p class="text-muted small mb-3">
+            This operation extracts all customer transactions directly from the SQLite database (<code>transactions</code> &amp; <code>transaction_items</code>), preprocesses the baskets into binary itemsets, runs the <strong>Apriori Algorithm</strong>, and updates the active recommendation rules in the database.
+          </p>
+          <div class="p-3 bg-light rounded-3 border mb-3 font-mono small text-secondary">
+            Database Transactions &rarr; Data Preprocessing &rarr; Apriori Frequent Itemsets &rarr; Association Rules &rarr; Saved to Database
+          </div>
+          <div class="mb-3">
+            <label class="form-label small fw-bold">Minimum Support Threshold</label>
+            <input type="number" step="0.01" min="0.01" max="0.5" name="min_support" class="form-control" value="0.03">
+            <div class="form-text small">Fraction of transactions required (e.g. 0.03 = 3%)</div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label small fw-bold">Minimum Confidence Threshold</label>
+            <input type="number" step="0.01" min="0.05" max="1.0" name="min_confidence" class="form-control" value="0.15">
+            <div class="form-text small">Minimum conditional probability (e.g. 0.15 = 15%)</div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label small fw-bold">Minimum Lift Threshold</label>
+            <input type="number" step="0.1" min="1.0" max="10.0" name="min_lift" class="form-control" value="1.0">
+            <div class="form-text small">Strength over random chance (e.g. 1.0)</div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-light rounded-pill" data-bs-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-primary rounded-pill">🔄 Regenerate Rules Now</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

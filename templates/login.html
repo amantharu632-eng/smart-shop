@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block title %}Sign In – SmartShop{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6 col-lg-5">
+      <div class="card border-0 shadow-lg rounded-4 p-4 p-md-5 bg-white">
+        <div class="text-center mb-4">
+          <div class="brand-icon mx-auto mb-2" style="width: 48px; height: 48px; font-size: 1.4rem;">
+            <i class="bi bi-person-fill"></i>
+          </div>
+          <h3 class="fw-bold text-dark">Welcome Back</h3>
+          <p class="text-muted small">Log in to view personalized recommendations &amp; order history</p>
+        </div>
+
+        <form action="{{ url_for('login') }}" method="POST">
+          <div class="mb-3">
+            <label class="form-label small fw-bold text-muted">Email Address</label>
+            <div class="input-group">
+              <span class="input-group-text bg-light border-end-0 text-muted"><i class="bi bi-envelope"></i></span>
+              <input type="email" name="email" id="login-email" class="form-control rounded-end-3" placeholder="name@example.com" required>
+            </div>
+          </div>
+
+          <div class="mb-4">
+            <div class="d-flex justify-content-between align-items-center mb-1">
+              <label class="form-label small fw-bold text-muted mb-0">Password</label>
+            </div>
+            <div class="input-group">
+              <span class="input-group-text bg-light border-end-0 text-muted"><i class="bi bi-shield-lock"></i></span>
+              <input type="password" name="password" id="login-password" class="form-control rounded-end-3" placeholder="••••••••" required>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary-custom w-100 py-2 rounded-pill fw-bold mb-3" id="submit-login-btn">
+            Sign In
+          </button>
+        </form>
+
+        <!-- Quick Demo Credentials Box for College Viva -->
+        <div class="p-3 bg-light rounded-3 border mb-3 small">
+          <div class="fw-bold text-dark mb-1"><i class="bi bi-key-fill text-warning me-1"></i> Quick Demo Logins:</div>
+          <div class="d-flex justify-content-between align-items-center mt-2">
+            <span><strong>Admin:</strong> admin@smartshop.com / admin123</span>
+            <button class="btn btn-xs btn-outline-secondary py-0 px-2 small" onclick="document.getElementById('login-email').value='admin@smartshop.com'; document.getElementById('login-password').value='admin123';">Autofill</button>
+          </div>
+          <div class="d-flex justify-content-between align-items-center mt-2">
+            <span><strong>Customer:</strong> john@example.com / user123</span>
+            <button class="btn btn-xs btn-outline-secondary py-0 px-2 small" onclick="document.getElementById('login-email').value='john@example.com'; document.getElementById('login-password').value='user123';">Autofill</button>
+          </div>
+        </div>
+
+        <div class="text-center text-muted small">
+          Don't have an account? <a href="{{ url_for('register') }}" class="text-primary fw-bold text-decoration-none">Create an Account</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

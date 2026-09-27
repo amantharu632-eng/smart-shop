@@ -1,0 +1,147 @@
+{% extends 'base.html' %}
+
+{% block title %}Checkout – SmartShop{% endblock %}
+
+{% block content %}
+<div class="container mb-5">
+  <div class="mb-4 pb-3 border-bottom">
+    <h2 class="fw-bold mb-1"><i class="bi bi-credit-card-2-front me-2 text-primary"></i> Order Checkout</h2>
+    <p class="text-muted small mb-0">Complete your shipping and payment information to finalize your transaction</p>
+  </div>
+
+  <form action="{{ url_for('checkout') }}" method="POST">
+    <div class="row g-4">
+      <!-- Shipping & Payment Details -->
+      <div class="col-lg-8">
+        <!-- Shipping Address -->
+        <div class="card border-0 shadow-sm rounded-4 p-4 bg-white mb-4">
+          <h5 class="fw-bold mb-3"><i class="bi bi-geo-alt me-2 text-primary"></i> 1. Shipping Address</h5>
+          
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label small fw-bold text-muted">Full Name *</label>
+              <input type="text" name="full_name" class="form-control rounded-3" value="{{ session.get('user_name', '') }}" required>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label small fw-bold text-muted">Email Address *</label>
+              <input type="email" name="email" class="form-control rounded-3" value="{{ session.get('user_email', '') }}" required>
+            </div>
+
+            <div class="col-12">
+              <label class="form-label small fw-bold text-muted">Street Address *</label>
+              <input type="text" name="address" class="form-control rounded-3" placeholder="123 Main St, Apt 4B" required>
+            </div>
+
+            <div class="col-md-5">
+              <label class="form-label small fw-bold text-muted">City *</label>
+              <input type="text" name="city" class="form-control rounded-3" placeholder="San Francisco" required>
+            </div>
+
+            <div class="col-md-4">
+              <label class="form-label small fw-bold text-muted">State / Province</label>
+              <input type="text" name="state" class="form-control rounded-3" placeholder="California">
+            </div>
+
+            <div class="col-md-3">
+              <label class="form-label small fw-bold text-muted">Postal Code *</label>
+              <input type="text" name="postal_code" class="form-control rounded-3" placeholder="94103" required>
+            </div>
+
+            <div class="col-12">
+              <label class="form-label small fw-bold text-muted">Phone Number</label>
+              <input type="tel" name="phone" class="form-control rounded-3" placeholder="+1 (555) 000-0000">
+            </div>
+          </div>
+        </div>
+
+        <!-- Payment Method -->
+        <div class="card border-0 shadow-sm rounded-4 p-4 bg-white">
+          <h5 class="fw-bold mb-3"><i class="bi bi-wallet2 me-2 text-primary"></i> 2. Payment Method</h5>
+          
+          <div class="row g-3">
+            <div class="col-md-6">
+              <div class="p-3 border rounded-3 bg-light">
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="payment_method" id="pay_cod" value="Cash on Delivery" checked>
+                  <label class="form-check-label fw-bold text-dark" for="pay_cod">
+                    <i class="bi bi-cash-stack text-success me-2"></i> Cash on Delivery
+                  </label>
+                </div>
+                <div class="small text-muted ms-4 mt-1">Pay with cash when package arrives at your door.</div>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="p-3 border rounded-3 bg-light">
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="payment_method" id="pay_demo_card" value="Demo Online Card">
+                  <label class="form-check-label fw-bold text-dark" for="pay_demo_card">
+                    <i class="bi bi-credit-card text-primary me-2"></i> Demo Card / UPI
+                  </label>
+                </div>
+                <div class="small text-muted ms-4 mt-1">Instant simulated digital payment (no charges).</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Order Review Sidebar -->
+      <div class="col-lg-4">
+        <div class="card border-0 shadow-sm rounded-4 p-4 bg-white sticky-top" style="top: 90px;">
+          <div class="d-flex align-items-center justify-content-between mb-3">
+            <h5 class="fw-bold mb-0">Order Items ({{ cart_items|length }})</h5>
+            <a href="{{ url_for('view_cart') }}" class="small text-decoration-none text-primary fw-semibold">
+              <i class="bi bi-bag me-1"></i> Edit Cart
+            </a>
+          </div>
+
+          <div class="d-flex flex-column gap-2 mb-3 max-vh-50 overflow-y-auto">
+            {% for item in cart_items %}
+              <div class="d-flex justify-content-between align-items-center py-2 border-bottom small">
+                <div class="d-flex align-items-center gap-2">
+                  <img src="{{ item.product.image }}" alt="{{ item.product.name }}" style="width: 40px; height: 40px; object-fit: cover; border-radius: 6px;">
+                  <div>
+                    <div class="fw-semibold text-truncate" style="max-width: 150px;">{{ item.product.name }}</div>
+                    <div class="text-muted">Qty: {{ item.quantity }}</div>
+                  </div>
+                </div>
+                <div class="fw-bold text-dark">${{ "%.2f"|format(item.total_price) }}</div>
+              </div>
+            {% endfor %}
+          </div>
+
+          <div class="d-flex justify-content-between mb-2 small text-muted">
+            <span>Subtotal</span>
+            <span>${{ "%.2f"|format(subtotal) }}</span>
+          </div>
+
+          <div class="d-flex justify-content-between mb-2 small text-muted">
+            <span>Shipping</span>
+            <span class="text-success">{% if subtotal > 50 %}FREE{% else %}$4.99{% endif %}</span>
+          </div>
+
+          {% if discount_amount > 0 %}
+            <div class="d-flex justify-content-between mb-2 small text-success">
+              <span>Discount</span>
+              <span>-${{ "%.2f"|format(discount_amount) }}</span>
+            </div>
+          {% endif %}
+
+          <hr class="my-3">
+
+          <div class="d-flex justify-content-between mb-4">
+            <span class="fs-5 fw-bold text-dark">Total</span>
+            <span class="fs-4 fw-extrabold text-primary">${{ "%.2f"|format(final_total) }}</span>
+          </div>
+
+          <button type="submit" class="btn btn-primary-custom w-100 py-3 rounded-pill fw-bold fs-6" id="place-order-btn">
+            <i class="bi bi-lock-fill me-2"></i> Confirm &amp; Place Order
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+{% endblock %}

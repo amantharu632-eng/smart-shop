@@ -1,0 +1,454 @@
+{% extends 'base.html' %}
+
+{% block title %}SmartShop – Intelligent Shopping with Association Rule Mining{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-wrapper mb-5 rounded-4 shadow-sm mx-2 mx-md-4">
+  <div class="container position-relative">
+    <div class="row align-items-center g-4">
+      <div class="col-lg-7">
+        <div class="hero-badge mb-3">
+          <i class="bi bi-stars text-warning"></i> Powered by Apriori Association Rule Mining
+        </div>
+        <h1 class="display-4 fw-extrabold text-white mb-3">
+          Smart Shopping Meets <br>
+          <span class="text-gradient">Data Mining Intelligence</span>
+        </h1>
+        <p class="lead text-light opacity-75 mb-4 pe-lg-4">
+          Experience market basket analysis in real-time. Discover products curated dynamically through customer transaction patterns, Support, Confidence, and Lift metrics.
+        </p>
+
+        <!-- Big Search Form in Hero -->
+        <form action="{{ url_for('products_list') }}" method="GET" class="mb-4">
+          <div class="input-group input-group-lg shadow-lg bg-white rounded-pill p-1">
+            <span class="input-group-text bg-transparent border-0 ps-3 text-muted">
+              <i class="bi bi-search fs-5"></i>
+            </span>
+            <input type="text" name="q" class="form-control border-0 bg-transparent shadow-none" placeholder="Search for Laptop, Headphones, Shoes, Desk Lamp..." id="hero-search-input">
+            <button class="btn btn-primary-custom rounded-pill px-4" type="submit" id="hero-search-btn">
+              Search Catalog
+            </button>
+          </div>
+        </form>
+
+        <div class="d-flex flex-wrap gap-3">
+          <a href="{{ url_for('products_list') }}" class="btn btn-light rounded-pill px-4 py-2 fw-semibold" id="hero-btn-catalog">
+            <i class="bi bi-bag-check me-2"></i> Browse All Products
+          </a>
+          <a href="{{ url_for('recommendations_page') }}" class="btn btn-outline-light rounded-pill px-4 py-2 fw-semibold" id="hero-btn-demo">
+            <i class="bi bi-cpu me-2"></i> Apriori Mining Demo
+          </a>
+          <a href="{{ url_for('dashboard') }}" class="btn btn-outline-light rounded-pill px-4 py-2 fw-semibold" id="hero-btn-dashboard">
+            <i class="bi bi-bar-chart-line me-2"></i> Mining Analytics
+          </a>
+        </div>
+      </div>
+
+      <!-- Hero Visual Data Mining Spotlight -->
+      <div class="col-lg-5">
+        <div class="dm-highlight-card">
+          <div class="d-flex align-items-center justify-content-between mb-3">
+            <span class="badge bg-primary px-3 py-2 rounded-pill font-mono small">
+              <i class="bi bi-diagram-3-fill me-1"></i> LIVE APRIORI ENGINE
+            </span>
+            <span class="text-white-50 small">SQLite &bull; 80+ Transactions</span>
+          </div>
+
+          <h5 class="text-white fw-bold mb-2">Association Rule Sample</h5>
+          <p class="text-white-50 small mb-3">Dynamically discovered from real transaction co-occurrences:</p>
+
+          <div class="p-3 bg-dark bg-opacity-50 rounded-3 border border-light border-opacity-10 mb-3">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <span class="text-white fw-semibold small">Antecedent &rarr; Consequent</span>
+              <span class="badge bg-success-subtle text-success small">Frequent Pattern</span>
+            </div>
+            <div class="text-warning fw-bold mb-2 font-mono small">
+              {UltraBook Pro 15} &rarr; {Ergonomic Mouse, Laptop Bag}
+            </div>
+            <div class="d-flex gap-2">
+              <span class="metric-badge badge-support">Supp: 0.35</span>
+              <span class="metric-badge badge-confidence">Conf: 82%</span>
+              <span class="metric-badge badge-lift">Lift: 2.34x</span>
+            </div>
+          </div>
+
+          <div class="d-flex justify-content-between align-items-center text-white-50 small">
+            <span><i class="bi bi-check-circle-fill text-success me-1"></i> Confidence &gt; 15%</span>
+            <span><i class="bi bi-check-circle-fill text-success me-1"></i> Lift &gt; 1.0</span>
+            <a href="{{ url_for('rules_table') }}" class="text-info text-decoration-none">View All Rules &rarr;</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Product Categories Navigation -->
+<section class="container mb-5">
+  <div class="d-flex align-items-center justify-content-between mb-4">
+    <div>
+      <h3 class="fw-bold mb-1">Browse by Category</h3>
+      <p class="text-muted small mb-0">Explore our rich catalog across four distinct departments</p>
+    </div>
+    <a href="{{ url_for('products_list') }}" class="btn btn-outline-custom btn-sm">All Products &rarr;</a>
+  </div>
+
+  <div class="row g-3">
+    <div class="col-6 col-md-3">
+      <a href="{{ url_for('products_list', category='Electronics') }}" class="text-decoration-none">
+        <div class="p-4 bg-white rounded-4 border text-center product-card h-100">
+          <div class="stat-icon bg-primary-subtle text-primary mx-auto mb-2">
+            <i class="bi bi-laptop fs-4"></i>
+          </div>
+          <h6 class="fw-bold text-dark mb-1">Electronics</h6>
+          <span class="text-muted small">Laptops, Phones, Audio</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="col-6 col-md-3">
+      <a href="{{ url_for('products_list', category='Accessories') }}" class="text-decoration-none">
+        <div class="p-4 bg-white rounded-4 border text-center product-card h-100">
+          <div class="stat-icon bg-info-subtle text-info mx-auto mb-2">
+            <i class="bi bi-headphones fs-4"></i>
+          </div>
+          <h6 class="fw-bold text-dark mb-1">Accessories</h6>
+          <span class="text-muted small">Bags, Chargers, Hubs</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="col-6 col-md-3">
+      <a href="{{ url_for('products_list', category='Home') }}" class="text-decoration-none">
+        <div class="p-4 bg-white rounded-4 border text-center product-card h-100">
+          <div class="stat-icon bg-warning-subtle text-warning mx-auto mb-2">
+            <i class="bi bi-lamp fs-4"></i>
+          </div>
+          <h6 class="fw-bold text-dark mb-1">Home & Living</h6>
+          <span class="text-muted small">Lamps, Mugs, Bottles</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="col-6 col-md-3">
+      <a href="{{ url_for('products_list', category='Fashion') }}" class="text-decoration-none">
+        <div class="p-4 bg-white rounded-4 border text-center product-card h-100">
+          <div class="stat-icon bg-danger-subtle text-danger mx-auto mb-2">
+            <i class="bi bi-handbag fs-4"></i>
+          </div>
+          <h6 class="fw-bold text-dark mb-1">Fashion</h6>
+          <span class="text-muted small">Shoes, Tees, Jeans</span>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Recommended Products for User (Personalized / High Lift Rules) -->
+<section class="container mb-5">
+  <div class="d-flex align-items-center justify-content-between mb-4">
+    <div>
+      <div class="d-flex align-items-center gap-2">
+        <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-2 py-1 font-mono small">
+          <i class="bi bi-magic me-1"></i> AI Recommended
+        </span>
+        <h3 class="fw-bold mb-0">Recommended for You</h3>
+      </div>
+      <p class="text-muted small mb-0 mt-1">Generated dynamically using Association Rule Mining &amp; user browsing activity</p>
+    </div>
+    <a href="{{ url_for('recommendations_page') }}" class="btn btn-outline-custom btn-sm">See How It Works</a>
+  </div>
+
+  <div class="row g-4">
+    {% for product in recommended_products %}
+      <div class="col-12 col-sm-6 col-lg-3">
+        <div class="product-card">
+          <div class="product-card-img-wrap">
+            <img src="{{ product.image }}" alt="{{ product.name }}" class="product-card-img" loading="lazy">
+            <span class="category-tag">{{ product.category }}</span>
+            <span class="stock-tag">{{ product.stock }} in stock</span>
+          </div>
+          <div class="product-card-body">
+            <div class="d-flex align-items-center justify-content-between mb-1">
+              <div class="text-warning small">
+                <i class="bi bi-star-fill"></i>
+                <span class="fw-bold text-dark ms-1">{{ product.rating }}</span>
+              </div>
+              {% if product.lift %}
+                <span class="badge bg-purple-subtle text-purple font-mono small" title="Lift metric from Apriori" style="background:#f3e8ff; color:#7e22ce;">
+                  Lift: {{ product.lift }}x
+                </span>
+              {% endif %}
+            </div>
+
+            <h5 class="product-card-title">
+              <a href="{{ url_for('product_detail', product_id=product.id) }}" class="text-decoration-none text-dark">
+                {{ product.name }}
+              </a>
+            </h5>
+
+            <p class="product-card-desc">{{ product.description }}</p>
+
+            <div class="product-card-footer">
+              <span class="product-price">${{ "%.2f"|format(product.price) }}</span>
+              <div class="d-flex gap-1">
+                <a href="{{ url_for('product_detail', product_id=product.id) }}" class="btn btn-sm btn-outline-secondary rounded-pill px-2" title="View Details">
+                  <i class="bi bi-eye"></i>
+                </a>
+                <button class="btn btn-sm btn-primary-custom rounded-pill px-3" onclick="addToCart({{ product.id }}, 1, event)" id="add-btn-rec-{{ product.id }}">
+                  <i class="bi bi-cart-plus me-1"></i> Add
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</section>
+
+<!-- Personalized "Because You Bought This" Section (Apriori Mining) -->
+{% if because_you_bought_product and because_you_bought_recs %}
+<section class="container mb-5">
+  <div class="card border-0 shadow-sm rounded-4 p-4 p-md-5 bg-white border">
+    <div class="d-flex align-items-center justify-content-between mb-4 pb-2 border-bottom">
+      <div>
+        <div class="d-flex align-items-center gap-2 mb-1">
+          <span class="badge bg-purple-subtle text-purple border font-mono small" style="background:#f3e8ff; color:#7e22ce;">
+            <i class="bi bi-bag-check-fill me-1"></i> PURCHASE AFFINITY
+          </span>
+          <span class="badge bg-success-subtle text-success border border-success-subtle font-mono small">
+            📊 Recommended based on shopping patterns
+          </span>
+        </div>
+        <h3 class="fw-bold mb-0">🛍️ Because You Bought <span class="text-primary">{{ because_you_bought_product }}</span></h3>
+        <p class="text-muted small mb-0 mt-1">Discovered dynamically through transaction basket association rules ($A \rightarrow B$)</p>
+      </div>
+    </div>
+
+    <div class="row g-4">
+      {% for product in because_you_bought_recs %}
+        <div class="col-12 col-sm-6 col-lg-3">
+          <div class="product-card h-100 border">
+            <div class="product-card-img-wrap" style="height: 180px;">
+              <img src="{{ product.image }}" alt="{{ product.name }}" class="product-card-img" loading="lazy">
+              <span class="category-tag">{{ product.category }}</span>
+              <span class="stock-tag">{{ product.stock }} in stock</span>
+            </div>
+            <div class="product-card-body p-3 d-flex flex-column justify-content-between">
+              <div>
+                {% if product.confidence and product.lift %}
+                  <div class="d-flex flex-wrap gap-1 mb-2">
+                    <span class="metric-badge badge-confidence">Conf: {{ "%.0f"|format(product.confidence * 100) }}%</span>
+                    <span class="metric-badge badge-lift">Lift: {{ "%.2f"|format(product.lift) }}x</span>
+                  </div>
+                {% endif %}
+                <h6 class="product-card-title mb-1">
+                  <a href="{{ url_for('product_detail', product_id=product.id) }}" class="text-decoration-none text-dark">
+                    {{ product.name }}
+                  </a>
+                </h6>
+                <p class="product-card-desc mb-2 small">{{ product.description }}</p>
+              </div>
+
+              <div class="product-card-footer pt-2 mt-2 border-top">
+                <span class="product-price fs-6">${{ "%.2f"|format(product.price) }}</span>
+                <div class="d-flex gap-1">
+                  <a href="{{ url_for('product_detail', product_id=product.id) }}" class="btn btn-sm btn-outline-secondary rounded-pill px-2">
+                    <i class="bi bi-eye"></i>
+                  </a>
+                  <button class="btn btn-sm btn-primary-custom rounded-pill px-3" onclick="addToCart({{ product.id }}, 1, event)">
+                    <i class="bi bi-cart-plus me-1"></i> Add
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- Popular Products -->
+<section class="container mb-5">
+  <div class="d-flex align-items-center justify-content-between mb-4">
+    <div>
+      <h3 class="fw-bold mb-1">Popular &amp; Trending Products</h3>
+      <p class="text-muted small mb-0">Customer favorites with top sales frequency and exceptional reviews</p>
+    </div>
+    <a href="{{ url_for('products_list') }}" class="btn btn-outline-custom btn-sm">Explore Catalog</a>
+  </div>
+
+  <div class="row g-4">
+    {% for product in popular_products %}
+      <div class="col-12 col-sm-6 col-lg-3">
+        <div class="product-card">
+          <div class="product-card-img-wrap">
+            <img src="{{ product.image }}" alt="{{ product.name }}" class="product-card-img" loading="lazy">
+            <span class="category-tag">{{ product.category }}</span>
+          </div>
+          <div class="product-card-body">
+            <div class="d-flex align-items-center justify-content-between mb-1">
+              <div class="text-warning small">
+                <i class="bi bi-star-fill"></i>
+                <span class="fw-bold text-dark ms-1">{{ product.rating }}</span>
+              </div>
+              <span class="text-muted small"><i class="bi bi-box-seam me-1"></i> {{ product.stock }} left</span>
+            </div>
+
+            <h5 class="product-card-title">
+              <a href="{{ url_for('product_detail', product_id=product.id) }}" class="text-decoration-none text-dark">
+                {{ product.name }}
+              </a>
+            </h5>
+
+            <p class="product-card-desc">{{ product.description }}</p>
+
+            <div class="product-card-footer">
+              <span class="product-price">${{ "%.2f"|format(product.price) }}</span>
+              <div class="d-flex gap-1">
+                <a href="{{ url_for('product_detail', product_id=product.id) }}" class="btn btn-sm btn-outline-secondary rounded-pill px-2">
+                  <i class="bi bi-eye"></i>
+                </a>
+                <button class="btn btn-sm btn-primary-custom rounded-pill px-3" onclick="addToCart({{ product.id }}, 1, event)" id="add-btn-pop-{{ product.id }}">
+                  <i class="bi bi-cart-plus me-1"></i> Add
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</section>
+
+<!-- Recently Viewed Products (if any) -->
+{% if recently_viewed_products %}
+<section class="container mb-5">
+  <div class="d-flex align-items-center justify-content-between mb-4">
+    <div>
+      <h4 class="fw-bold mb-1"><i class="bi bi-clock-history text-secondary me-2"></i> Recently Viewed by You</h4>
+      <p class="text-muted small mb-0">Products you inspected during your current session</p>
+    </div>
+  </div>
+
+  <div class="row g-4">
+    {% for product in recently_viewed_products %}
+      <div class="col-6 col-md-3">
+        <div class="product-card">
+          <div class="product-card-img-wrap" style="height: 160px;">
+            <img src="{{ product.image }}" alt="{{ product.name }}" class="product-card-img">
+          </div>
+          <div class="product-card-body p-3">
+            <h6 class="product-card-title mb-1">
+              <a href="{{ url_for('product_detail', product_id=product.id) }}" class="text-decoration-none text-dark">
+                {{ product.name }}
+              </a>
+            </h6>
+            <div class="d-flex align-items-center justify-content-between mt-2">
+              <span class="fw-bold text-primary">${{ "%.2f"|format(product.price) }}</span>
+              <a href="{{ url_for('product_detail', product_id=product.id) }}" class="btn btn-sm btn-outline-primary rounded-pill px-2 py-0">View</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+
+<!-- Academic Data Mining Workflow Banner -->
+<section class="container mb-5">
+  <div class="p-4 p-md-5 bg-white rounded-4 border shadow-sm">
+    <div class="row align-items-center g-4">
+      <div class="col-lg-6">
+        <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-3 py-1 font-mono mb-2">
+          ACADEMIC ARCHITECTURE
+        </span>
+        <h3 class="fw-bold mb-3">How the Data Mining Pipeline Works</h3>
+        <p class="text-muted small mb-4">
+          SmartShop illustrates Market Basket Analysis. Instead of arbitrary recommendation lists, recommendations are mathematically derived using the <strong>Apriori Algorithm</strong> over transaction history.
+        </p>
+
+        <div class="d-flex flex-column gap-3">
+          <div class="d-flex gap-3">
+            <div class="stat-icon bg-info-subtle text-info mb-0" style="width: 40px; height: 40px; min-width: 40px;">
+              <i class="bi bi-1-circle-fill"></i>
+            </div>
+            <div>
+              <h6 class="fw-bold mb-0">Transaction Preprocessing</h6>
+              <p class="text-muted small mb-0">Multi-item customer baskets are encoded into binary boolean matrix with <code>mlxtend.TransactionEncoder</code>.</p>
+            </div>
+          </div>
+
+          <div class="d-flex gap-3">
+            <div class="stat-icon bg-primary-subtle text-primary mb-0" style="width: 40px; height: 40px; min-width: 40px;">
+              <i class="bi bi-2-circle-fill"></i>
+            </div>
+            <div>
+              <h6 class="fw-bold mb-0">Apriori Pruning &amp; Frequent Itemsets</h6>
+              <p class="text-muted small mb-0">Iteratively generates $C_k$ candidates and prunes infrequent itemsets using minimum support threshold.</p>
+            </div>
+          </div>
+
+          <div class="d-flex gap-3">
+            <div class="stat-icon bg-success-subtle text-success mb-0" style="width: 40px; height: 40px; min-width: 40px;">
+              <i class="bi bi-3-circle-fill"></i>
+            </div>
+            <div>
+              <h6 class="fw-bold mb-0">Association Rules (Confidence &amp; Lift)</h6>
+              <p class="text-muted small mb-0">Extracts strong rules $A \rightarrow B$. Items with highest Lift and Confidence are displayed in real-time!</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-4">
+          <a href="{{ url_for('recommendations_page') }}" class="btn btn-primary-custom">
+            Launch Data Mining Hub &rarr;
+          </a>
+        </div>
+      </div>
+
+      <div class="col-lg-6 text-center">
+        <div class="p-4 bg-light rounded-4 border">
+          <h6 class="fw-bold text-dark mb-3">Live Apriori Pipeline Status</h6>
+          <div class="row g-3">
+            <div class="col-6">
+              <div class="p-3 bg-white rounded-3 border">
+                <div class="stat-value text-primary fs-3">{{ total_products }}</div>
+                <div class="stat-label">Catalog Products</div>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="p-3 bg-white rounded-3 border">
+                <div class="stat-value text-success fs-3">{{ total_transactions }}</div>
+                <div class="stat-label">Transactions</div>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="p-3 bg-white rounded-3 border">
+                <div class="stat-value text-info fs-3">{{ total_rules }}</div>
+                <div class="stat-label">Mined Rules</div>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="p-3 bg-white rounded-3 border">
+                <div class="stat-value text-warning fs-3">{{ "%.2f"|format(avg_lift) }}x</div>
+                <div class="stat-label">Average Lift</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-3 p-3 bg-dark text-white text-start rounded-3 font-mono small">
+            <div class="text-success"><i class="bi bi-terminal me-2"></i>sqlite3 database.db &bull; rules_count = {{ total_rules }}</div>
+            <div class="text-white-50 mt-1">Rule: {Laptop} &rarr; {Mouse, Bag} | Lift: &gt; 2.0x</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,166 @@
+{% extends 'base.html' %}
+
+{% block title %}Shopping Cart – SmartShop{% endblock %}
+
+{% block content %}
+<div class="container mb-5">
+  <div class="d-flex align-items-center justify-content-between mb-4 pb-3 border-bottom">
+    <h2 class="fw-bold mb-0"><i class="bi bi-bag-check me-2 text-primary"></i> Shopping Cart</h2>
+    <a href="{{ url_for('products_list') }}" class="btn btn-outline-custom btn-sm">Continue Shopping &rarr;</a>
+  </div>
+
+  {% if cart_items %}
+    <div class="row g-4">
+      <!-- Cart Items List -->
+      <div class="col-lg-8">
+        <div class="card border-0 shadow-sm rounded-4 p-4 bg-white mb-4">
+          <div class="d-flex justify-content-between align-items-center mb-3 text-muted small fw-bold text-uppercase border-bottom pb-2">
+            <span>Product Details</span>
+            <span>Subtotal</span>
+          </div>
+
+          {% for item in cart_items %}
+            <div class="cart-item-row justify-content-between">
+              <div class="d-flex align-items-center gap-3">
+                <img src="{{ item.product.image }}" alt="{{ item.product.name }}" class="cart-img">
+                <div>
+                  <span class="badge bg-light text-muted border small mb-1">{{ item.product.category }}</span>
+                  <h6 class="fw-bold mb-1">
+                    <a href="{{ url_for('product_detail', product_id=item.product.id) }}" class="text-decoration-none text-dark">
+                      {{ item.product.name }}
+                    </a>
+                  </h6>
+                  <div class="text-primary fw-bold small mb-2">${{ "%.2f"|format(item.product.price) }} each</div>
+
+                  <!-- Quantity Controls -->
+                  <div class="d-flex align-items-center gap-2">
+                    <div class="qty-control">
+                      <a href="{{ url_for('update_cart_quantity', product_id=item.product.id, action='decrease') }}" class="qty-btn text-decoration-none">-</a>
+                      <span class="qty-val">{{ item.quantity }}</span>
+                      <a href="{{ url_for('update_cart_quantity', product_id=item.product.id, action='increase') }}" class="qty-btn text-decoration-none">+</a>
+                    </div>
+
+                    <a href="{{ url_for('remove_from_cart', product_id=item.product.id) }}" class="btn btn-link text-danger btn-sm text-decoration-none p-0 ms-2" title="Remove item">
+                      <i class="bi bi-trash3 me-1"></i> Remove
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Item Total -->
+              <div class="text-end">
+                <div class="fs-5 fw-bold text-dark">${{ "%.2f"|format(item.total_price) }}</div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+
+        <!-- Association Rule Cart Recommendations: "Complete Your Purchase" -->
+        {% if cart_recommendations %}
+          <div class="card border-0 shadow-sm rounded-4 p-4 bg-white">
+            <div class="d-flex align-items-center justify-content-between mb-3 border-bottom pb-2">
+              <div>
+                <div class="d-flex align-items-center gap-2 mb-1">
+                  <span class="badge bg-purple-subtle text-purple border font-mono small" style="background:#f3e8ff; color:#7e22ce;">
+                    <i class="bi bi-cpu-fill me-1"></i> MARKET BASKET COMPLEMENTS
+                  </span>
+                  <span class="badge bg-success-subtle text-success border border-success-subtle font-mono small">
+                    📊 Recommended based on shopping patterns
+                  </span>
+                </div>
+                <h5 class="fw-bold mb-0">🎯 Complete Your Purchase</h5>
+              </div>
+            </div>
+
+            <div class="row g-3">
+              {% for rec in cart_recommendations %}
+                <div class="col-md-6">
+                  <div class="p-3 rounded-3 border bg-light d-flex align-items-center justify-content-between gap-3">
+                    <div class="d-flex align-items-center gap-3">
+                      <img src="{{ rec.image }}" alt="{{ rec.name }}" style="width: 55px; height: 55px; object-fit: cover; border-radius: 8px;">
+                      <div>
+                        <h6 class="fw-bold mb-0 text-truncate" style="max-width: 170px;">
+                          <a href="{{ url_for('product_detail', product_id=rec.id) }}" class="text-decoration-none text-dark">
+                            {{ rec.name }}
+                          </a>
+                        </h6>
+                        <span class="text-primary fw-bold small">${{ "%.2f"|format(rec.price) }}</span>
+                        <div class="metric-badge badge-lift py-0 px-1 mt-1 small" style="font-size: 0.68rem;">Lift: {{ "%.2f"|format(rec.lift) }}x</div>
+                      </div>
+                    </div>
+                    <button class="btn btn-sm btn-primary-custom rounded-pill px-3" onclick="addToCart({{ rec.id }}, 1, event)">
+                      <i class="bi bi-plus-lg"></i>
+                    </button>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+        {% endif %}
+      </div>
+
+      <!-- Order Summary Card -->
+      <div class="col-lg-4">
+        <div class="card border-0 shadow-sm rounded-4 p-4 bg-white sticky-top" style="top: 90px;">
+          <h5 class="fw-bold mb-4">Order Summary</h5>
+
+          <div class="d-flex justify-content-between mb-2 small text-muted">
+            <span>Subtotal ({{ cart_items|sum(attribute='quantity') }} items)</span>
+            <span class="fw-bold text-dark">${{ "%.2f"|format(subtotal) }}</span>
+          </div>
+
+          <div class="d-flex justify-content-between mb-2 small text-muted">
+            <span>Estimated Shipping</span>
+            <span class="fw-bold text-success">{% if subtotal > 50 %}FREE{% else %}$4.99{% endif %}</span>
+          </div>
+
+          {% if discount_amount > 0 %}
+            <div class="d-flex justify-content-between mb-2 small text-success">
+              <span>Discount Applied ({{ discount_code }})</span>
+              <span class="fw-bold">-${{ "%.2f"|format(discount_amount) }}</span>
+            </div>
+          {% endif %}
+
+          <hr class="my-3">
+
+          <div class="d-flex justify-content-between mb-4">
+            <span class="fs-5 fw-bold text-dark">Total</span>
+            <span class="fs-4 fw-extrabold text-primary">${{ "%.2f"|format(final_total) }}</span>
+          </div>
+
+          <!-- Promo Code Form -->
+          <form action="{{ url_for('apply_promo') }}" method="POST" class="mb-4">
+            <label class="form-label small fw-bold text-muted">Have a Promo Code?</label>
+            <div class="input-group input-group-sm">
+              <input type="text" name="promo_code" class="form-control rounded-start-pill ps-3" placeholder="Try SMART20" value="{{ discount_code or '' }}">
+              <button class="btn btn-outline-primary rounded-end-pill px-3" type="submit">Apply</button>
+            </div>
+            <div class="form-text small text-muted">Demo codes: <code>SMART20</code> (20% off) or <code>MINIPROJECT10</code> (10% off)</div>
+          </form>
+
+          <!-- Checkout Button -->
+          <a href="{{ url_for('checkout') }}" class="btn btn-primary-custom w-100 py-3 rounded-pill fw-bold fs-6" id="checkout-btn">
+            Proceed to Checkout <i class="bi bi-arrow-right ms-2"></i>
+          </a>
+
+          <div class="text-center mt-3 text-muted small">
+            <i class="bi bi-shield-check text-success me-1"></i> Demo transactions saved to SQLite
+          </div>
+        </div>
+      </div>
+    </div>
+  {% else %}
+    <!-- Empty Cart -->
+    <div class="text-center py-5 bg-white rounded-4 border p-5">
+      <div class="stat-icon bg-light text-muted mx-auto mb-3" style="width: 80px; height: 80px; font-size: 2.5rem;">
+        <i class="bi bi-cart-x"></i>
+      </div>
+      <h3 class="fw-bold text-dark">Your Cart is Currently Empty</h3>
+      <p class="text-muted small mb-4">Explore our catalog of 32+ products to trigger our Apriori recommendation engine.</p>
+      <a href="{{ url_for('products_list') }}" class="btn btn-primary-custom rounded-pill px-4 py-2">
+        <i class="bi bi-bag-plus me-2"></i> Start Shopping
+      </a>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

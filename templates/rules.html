@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+
+{% block title %}Association Rules Table – SmartShop{% endblock %}
+
+{% block content %}
+<div class="container mb-5">
+  <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between mb-4 pb-3 border-bottom gap-3">
+    <div>
+      <span class="badge bg-purple-subtle text-purple border font-mono small mb-1" style="background:#f3e8ff; color:#7e22ce;">
+        APRIORI KNOWLEDGE BASE
+      </span>
+      <h2 class="fw-bold mb-0">Mined Association Rules ({{ rules|length }} Total)</h2>
+      <p class="text-muted small mb-0">Discovered dynamically from multi-item transaction baskets</p>
+    </div>
+
+    <div class="d-flex align-items-center gap-2">
+      <a href="{{ url_for('export_rules_csv') }}" class="btn btn-outline-success btn-sm rounded-pill px-3">
+        <i class="bi bi-file-earmark-spreadsheet me-1"></i> Export to CSV
+      </a>
+      {% if session.get('is_admin') %}
+        <form action="{{ url_for('generate_rules_post') }}" method="POST" class="d-inline">
+          <button type="submit" class="btn btn-primary-custom btn-sm">
+            <i class="bi bi-arrow-clockwise me-1"></i> Re-Mine Rules
+          </button>
+        </form>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Interactive Filters & Search -->
+  <div class="card border-0 shadow-sm rounded-4 p-4 bg-white mb-4">
+    <div class="row g-3 align-items-end">
+      <!-- Search Input -->
+      <div class="col-md-5">
+        <label class="form-label small fw-bold text-muted text-uppercase">Filter by Item Name</label>
+        <div class="input-group">
+          <span class="input-group-text bg-light border-end-0 text-muted"><i class="bi bi-search"></i></span>
+          <input type="text" id="ruleSearch" class="form-control" placeholder="Search Laptop, Mouse, Phone, Shoes..." onkeyup="filterRulesTable()">
+        </div>
+      </div>
+
+      <!-- Min Confidence Filter -->
+      <div class="col-md-3">
+        <label class="form-label small fw-bold text-muted text-uppercase">Min Confidence</label>
+        <select id="minConfFilter" class="form-select" onchange="filterRulesTable()">
+          <option value="0">All Confidences (&ge; 0%)</option>
+          <option value="0.2">Confidence &ge; 20%</option>
+          <option value="0.4">Confidence &ge; 40%</option>
+          <option value="0.6">Confidence &ge; 60%</option>
+          <option value="0.8">Confidence &ge; 80%</option>
+        </select>
+      </div>
+
+      <!-- Min Lift Filter -->
+      <div class="col-md-2">
+        <label class="form-label small fw-bold text-muted text-uppercase">Min Lift</label>
+        <select id="minLiftFilter" class="form-select" onchange="filterRulesTable()">
+          <option value="1.0">Lift &ge; 1.0x</option>
+          <option value="1.5">Lift &ge; 1.5x</option>
+          <option value="2.0">Lift &ge; 2.0x</option>
+          <option value="3.0">Lift &ge; 3.0x</option>
+        </select>
+      </div>
+
+      <!-- Match Count Badge -->
+      <div class="col-md-2 text-md-end">
+        <div class="p-2 bg-light rounded-3 border text-center">
+          <span class="small text-muted d-block">Matching:</span>
+          <span id="visibleRulesCount" class="fw-bold text-primary font-mono fs-5">{{ rules|length }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Association Rules Table -->
+  <div class="card border-0 shadow-sm rounded-4 p-0 bg-white overflow-hidden">
+    <div class="table-responsive">
+      <table class="table custom-table mb-0" id="rulesTable">
+        <thead>
+          <tr>
+            <th style="width: 5%;">#</th>
+            <th style="width: 35%;">Antecedent (Item A)</th>
+            <th style="width: 35%;">Consequent (Item B)</th>
+            <th style="width: 8%;">Support</th>
+            <th style="width: 8%;">Confidence</th>
+            <th style="width: 9%;">Lift</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for r in rules %}
+            <tr data-conf="{{ r.confidence }}" data-lift="{{ r.lift }}">
+              <td class="text-muted small">{{ loop.index }}</td>
+              <td class="fw-semibold text-dark font-mono small">
+                <i class="bi bi-box-arrow-in-right text-muted me-1"></i> { {{ r.antecedents }} }
+              </td>
+              <td class="fw-semibold text-primary font-mono small">
+                <i class="bi bi-arrow-right-short text-primary fs-5 align-middle"></i> { {{ r.consequents }} }
+              </td>
+              <td><span class="metric-badge badge-support">{{ "%.4f"|format(r.support) }}</span></td>
+              <td><span class="metric-badge badge-confidence">{{ "%.1f"|format(r.confidence * 100) }}%</span></td>
+              <td><span class="metric-badge badge-lift">{{ "%.2f"|format(r.lift) }}x</span></td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}

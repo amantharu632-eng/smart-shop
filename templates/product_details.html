@@ -1,0 +1,171 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ product.name }} – SmartShop{% endblock %}
+
+{% block content %}
+<div class="container mb-5">
+  <!-- Breadcrumb -->
+  <nav aria-label="breadcrumb" class="mb-4">
+    <ol class="breadcrumb small">
+      <li class="breadcrumb-item"><a href="{{ url_for('index') }}" class="text-decoration-none">Home</a></li>
+      <li class="breadcrumb-item"><a href="{{ url_for('products_list') }}" class="text-decoration-none">Products</a></li>
+      <li class="breadcrumb-item"><a href="{{ url_for('products_list', category=product.category) }}" class="text-decoration-none">{{ product.category }}</a></li>
+      <li class="breadcrumb-item active" aria-current="page">{{ product.name }}</li>
+    </ol>
+  </nav>
+
+  <!-- Product Main Info Card -->
+  <div class="card border-0 shadow-sm rounded-4 overflow-hidden mb-5">
+    <div class="card-body p-4 p-lg-5">
+      <div class="row g-5 align-items-center">
+        <!-- Product Image -->
+        <div class="col-lg-6">
+          <div class="rounded-4 overflow-hidden shadow-sm bg-light text-center border position-relative" style="height: 440px;">
+            <img src="{{ product.image }}" alt="{{ product.name }}" class="w-100 h-100 object-fit-cover" id="main-product-img">
+            <span class="category-tag fs-6 py-2 px-3">{{ product.category }}</span>
+          </div>
+        </div>
+
+        <!-- Product Specs & Actions -->
+        <div class="col-lg-6">
+          <div class="d-flex align-items-center gap-2 mb-2">
+            <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-3 py-1 font-mono">
+              SKU: SS-{{ "%04d"|format(product.id) }}
+            </span>
+            <div class="text-warning small ms-2">
+              <i class="bi bi-star-fill"></i>
+              <span class="fw-bold text-dark ms-1">{{ product.rating }} / 5.0</span>
+              <span class="text-muted">(120+ verified reviews)</span>
+            </div>
+          </div>
+
+          <h1 class="display-6 fw-bold text-dark mb-3">{{ product.name }}</h1>
+
+          <div class="d-flex align-items-baseline gap-3 mb-4">
+            <span class="display-5 fw-extrabold text-primary">${{ "%.2f"|format(product.price) }}</span>
+            <span class="text-decoration-line-through text-muted fs-5">${{ "%.2f"|format(product.price * 1.25) }}</span>
+            <span class="badge bg-success-subtle text-success border border-success-subtle px-2 py-1">20% Off Demo</span>
+          </div>
+
+          <p class="text-secondary leading-relaxed mb-4 fs-6">
+            {{ product.description }}
+          </p>
+
+          <!-- Stock & Guarantee Info -->
+          <div class="p-3 bg-light rounded-3 border mb-4 d-flex justify-content-around text-center small">
+            <div>
+              <div class="text-muted"><i class="bi bi-box-seam me-1 text-primary"></i> Stock Status</div>
+              <div class="fw-bold text-success">{{ product.stock }} units available</div>
+            </div>
+            <div class="border-start"></div>
+            <div>
+              <div class="text-muted"><i class="bi bi-truck me-1 text-primary"></i> Shipping</div>
+              <div class="fw-bold text-dark">Fast Dispatch</div>
+            </div>
+            <div class="border-start"></div>
+            <div>
+              <div class="text-muted"><i class="bi bi-shield-check me-1 text-primary"></i> Warranty</div>
+              <div class="fw-bold text-dark">1 Year Official</div>
+            </div>
+          </div>
+
+          <!-- Quantity and Cart Action -->
+          <form action="{{ url_for('add_to_cart_post', product_id=product.id) }}" method="POST" class="d-flex flex-wrap gap-3 align-items-center mb-3">
+            <div class="qty-control">
+              <button type="button" class="qty-btn" onclick="let q=document.getElementById('product-qty'); if(q.value>1) q.value--;">-</button>
+              <input type="number" id="product-qty" name="quantity" value="1" min="1" max="{{ product.stock }}" class="form-control border-0 text-center fw-bold p-0 shadow-none" style="width: 50px;">
+              <button type="button" class="qty-btn" onclick="let q=document.getElementById('product-qty'); if(q.value < {{ product.stock }}) q.value++;">+</button>
+            </div>
+
+            <button type="submit" class="btn btn-primary-custom px-4 py-2" id="detail-add-cart-btn">
+              <i class="bi bi-cart-plus me-1"></i> Add to Cart
+            </button>
+
+            <button type="submit" name="buy_now" value="1" class="btn btn-dark rounded-pill px-4 py-2 fw-semibold" id="detail-buy-now-btn">
+              <i class="bi bi-lightning-charge me-1"></i> Buy Now
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DATA MINING SECTION: You May Also Need -->
+  <div class="mb-5">
+    <div class="card border-0 shadow-sm rounded-4 p-4 p-md-5 bg-white">
+      <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between mb-4 pb-3 border-bottom gap-2">
+        <div>
+          <div class="d-flex align-items-center gap-2 mb-1">
+            <span class="badge bg-purple-subtle text-purple border font-mono small" style="background:#f3e8ff; color:#7e22ce; border-color:#e9d5ff;">
+              <i class="bi bi-diagram-3-fill me-1"></i> APRIORI ASSOCIATION MINING
+            </span>
+            <span class="badge bg-success-subtle text-success border border-success-subtle font-mono small">
+              📊 Recommended based on shopping patterns
+            </span>
+          </div>
+          <h3 class="fw-bold mb-0">🎯 You May Also Need</h3>
+        </div>
+        <a href="{{ url_for('recommendations_page') }}" class="btn btn-outline-custom btn-sm">
+          <i class="bi bi-info-circle me-1"></i> Explain Mining Logic
+        </a>
+      </div>
+
+      <!-- Academic Context Explanation Banner -->
+      <div class="alert alert-light border rounded-3 p-3 mb-4 small">
+        <div class="d-flex align-items-start gap-2">
+          <i class="bi bi-lightbulb-fill text-warning fs-5"></i>
+          <div>
+            <strong>Data Mining Logic:</strong>
+            {% if is_association_rule %}
+              The system searched transaction data for association rules where <em>"{{ product.name }}"</em> is the antecedent ($A \rightarrow B$). Below are the top related products customers bought together, ranked by <strong>Lift</strong> and <strong>Confidence</strong>.
+            {% else %}
+              No direct antecedent rule for <em>"{{ product.name }}"</em> met the minimum support threshold, so the recommender dynamically selected popular complementary items from <strong>{{ product.category }}</strong>.
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+      <!-- Recommended Product Cards Grid -->
+      <div class="row g-4">
+        {% for rec in recommended_products %}
+          <div class="col-12 col-sm-6 col-lg-3">
+            <div class="product-card h-100 border">
+              <div class="product-card-img-wrap" style="height: 180px;">
+                <img src="{{ rec.image }}" alt="{{ rec.name }}" class="product-card-img">
+                <span class="category-tag">{{ rec.category }}</span>
+              </div>
+              <div class="product-card-body p-3">
+                <!-- Academic Data Mining Metric Chips -->
+                {% if rec.confidence and rec.lift %}
+                  <div class="d-flex flex-wrap gap-1 mb-2">
+                    <span class="metric-badge badge-confidence" title="Confidence: P(Bought {{ rec.name }} | Bought {{ product.name }})">
+                      Conf: {{ "%.0f"|format(rec.confidence * 100) }}%
+                    </span>
+                    <span class="metric-badge badge-lift" title="Lift: Association strength over random chance">
+                      Lift: {{ "%.2f"|format(rec.lift) }}x
+                    </span>
+                  </div>
+                {% endif %}
+
+                <h6 class="product-card-title mb-1">
+                  <a href="{{ url_for('product_detail', product_id=rec.id) }}" class="text-decoration-none text-dark">
+                    {{ rec.name }}
+                  </a>
+                </h6>
+                <p class="product-card-desc mb-2 small">{{ rec.description }}</p>
+
+                <div class="product-card-footer pt-2">
+                  <span class="product-price fs-6">${{ "%.2f"|format(rec.price) }}</span>
+                  <button class="btn btn-sm btn-primary-custom rounded-pill px-3" onclick="addToCart({{ rec.id }}, 1, event)">
+                    <i class="bi bi-cart-plus me-1"></i> Add
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

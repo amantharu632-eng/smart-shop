@@ -1,0 +1,128 @@
+TransactionID,Items
+1,UltraBook Pro 15;Ergonomic Wireless Mouse;Premium Water-Resistant Laptop Bag
+2,UltraBook Pro 15;Ergonomic Wireless Mouse;Laptop Stand Aluminum Adjustable
+3,UltraBook Pro 15;Premium Water-Resistant Laptop Bag;Laptop Stand Aluminum Adjustable
+4,UltraBook Pro 15;Ergonomic Wireless Mouse;USB 3.0 High-Speed Hub 7-Port
+5,UltraBook Pro 15;USB 3.0 High-Speed Hub 7-Port;Braided Type-C USB Fast Cable
+6,UltraBook Pro 15;Ergonomic Wireless Mouse;Mechanical RGB Keyboard
+7,UltraBook Pro 15;Premium Water-Resistant Laptop Bag;Ergonomic Wireless Mouse;Laptop Stand Aluminum Adjustable
+8,UltraBook Pro 15;Laptop Stand Aluminum Adjustable;USB 3.0 High-Speed Hub 7-Port;Ergonomic Wireless Mouse
+9,UltraBook Pro 15;Ergonomic Wireless Mouse;Premium Water-Resistant Laptop Bag
+10,UltraBook Pro 15;Laptop Stand Aluminum Adjustable;Ergonomic Wireless Mouse
+11,Gaming Laptop Beast X;High-Precision Gaming Mouse;Mechanical RGB Keyboard
+12,Gaming Laptop Beast X;High-Precision Gaming Mouse;Laptop Cooling Pad RGB
+13,Gaming Laptop Beast X;Mechanical RGB Keyboard;Laptop Cooling Pad RGB
+14,Gaming Laptop Beast X;High-Precision Gaming Mouse;Mechanical RGB Keyboard;Laptop Cooling Pad RGB
+15,Gaming Laptop Beast X;Laptop Cooling Pad RGB;High-Precision Gaming Mouse
+16,Gaming Laptop Beast X;High-Precision Gaming Mouse;Wireless Noise-Cancelling Headphones
+17,Gaming Laptop Beast X;Mechanical RGB Keyboard;High-Precision Gaming Mouse
+18,Gaming Laptop Beast X;Laptop Cooling Pad RGB;Mechanical RGB Keyboard
+19,High-Precision Gaming Mouse;Mechanical RGB Keyboard;Laptop Cooling Pad RGB
+20,Gaming Laptop Beast X;High-Precision Gaming Mouse;Laptop Cooling Pad RGB
+21,SmartPhone Galaxy Pro;Shockproof Silicone Phone Cover;Tempered Glass Screen Protector
+22,SmartPhone Galaxy Pro;Shockproof Silicone Phone Cover;65W GaN Multi-Port Fast Charger
+23,SmartPhone Galaxy Pro;Tempered Glass Screen Protector;Braided Type-C USB Fast Cable
+24,SmartPhone Galaxy Pro;Shockproof Silicone Phone Cover;Braided Type-C USB Fast Cable
+25,SmartPhone Galaxy Pro;Shockproof Silicone Phone Cover;Tempered Glass Screen Protector;65W GaN Multi-Port Fast Charger
+26,SmartPhone Galaxy Pro;65W GaN Multi-Port Fast Charger;Braided Type-C USB Fast Cable
+27,SmartPhone Galaxy Pro;Shockproof Silicone Phone Cover;20000mAh Fast Charging Power Bank
+28,SmartPhone Galaxy Pro;20000mAh Fast Charging Power Bank;Braided Type-C USB Fast Cable
+29,Shockproof Silicone Phone Cover;Tempered Glass Screen Protector;65W GaN Multi-Port Fast Charger
+30,SmartPhone Galaxy Pro;Shockproof Silicone Phone Cover;Tempered Glass Screen Protector
+31,iPhone Pro Max Edition;Shockproof Silicone Phone Cover;True Wireless Earbuds
+32,iPhone Pro Max Edition;Shockproof Silicone Phone Cover;20000mAh Fast Charging Power Bank
+33,iPhone Pro Max Edition;True Wireless Earbuds;20000mAh Fast Charging Power Bank
+34,iPhone Pro Max Edition;Shockproof Silicone Phone Cover;Tempered Glass Screen Protector
+35,iPhone Pro Max Edition;Shockproof Silicone Phone Cover;Braided Type-C USB Fast Cable
+36,iPhone Pro Max Edition;True Wireless Earbuds;Shockproof Silicone Phone Cover
+37,iPhone Pro Max Edition;65W GaN Multi-Port Fast Charger;Braided Type-C USB Fast Cable
+38,iPhone Pro Max Edition;Shockproof Silicone Phone Cover;Tempered Glass Screen Protector;True Wireless Earbuds
+39,iPhone Pro Max Edition;True Wireless Earbuds;20000mAh Fast Charging Power Bank
+40,iPhone Pro Max Edition;Shockproof Silicone Phone Cover;65W GaN Multi-Port Fast Charger
+41,Wireless Noise-Cancelling Headphones;Fitness Smart Watch Ultra;20000mAh Fast Charging Power Bank
+42,Wireless Noise-Cancelling Headphones;Fitness Smart Watch Ultra;Insulated Stainless Steel Water Bottle
+43,Wireless Noise-Cancelling Headphones;Braided Type-C USB Fast Cable;Urban Commuter Travel Backpack
+44,Wireless Noise-Cancelling Headphones;Fitness Smart Watch Ultra;Urban Commuter Travel Backpack
+45,Wireless Noise-Cancelling Headphones;20000mAh Fast Charging Power Bank;Braided Type-C USB Fast Cable
+46,Fitness Smart Watch Ultra;Wireless Noise-Cancelling Headphones;Performance Breathable Running Shoes
+47,Fitness Smart Watch Ultra;Performance Breathable Running Shoes;Athletic Breathable Cotton Socks
+48,Fitness Smart Watch Ultra;Performance Breathable Running Shoes;Insulated Stainless Steel Water Bottle
+49,Fitness Smart Watch Ultra;True Wireless Earbuds;Insulated Stainless Steel Water Bottle
+50,Fitness Smart Watch Ultra;Athletic Breathable Cotton Socks;Insulated Stainless Steel Water Bottle
+51,French Press Coffee Maker;Ceramic Matte Coffee Mug 350ml;Insulated Stainless Steel Water Bottle
+52,French Press Coffee Maker;Ceramic Matte Coffee Mug 350ml;Minimalist LED Desk Table Lamp
+53,French Press Coffee Maker;Ceramic Matte Coffee Mug 350ml
+54,French Press Coffee Maker;Insulated Stainless Steel Water Bottle;Ceramic Matte Coffee Mug 350ml
+55,Ceramic Matte Coffee Mug 350ml;Minimalist LED Desk Table Lamp
+56,Ceramic Matte Coffee Mug 350ml;Minimalist LED Desk Table Lamp;French Press Coffee Maker
+57,Ceramic Matte Coffee Mug 350ml;Insulated Stainless Steel Water Bottle;Urban Commuter Travel Backpack
+58,French Press Coffee Maker;Ceramic Matte Coffee Mug 350ml
+59,Ceramic Matte Coffee Mug 350ml;Minimalist LED Desk Table Lamp
+60,French Press Coffee Maker;Ceramic Matte Coffee Mug 350ml;Minimalist LED Desk Table Lamp
+61,Aromatherapy Essential Oil Diffuser;Smart LED Ambient Room Strip;Minimalist LED Desk Table Lamp
+62,Aromatherapy Essential Oil Diffuser;Smart LED Ambient Room Strip
+63,Aromatherapy Essential Oil Diffuser;Minimalist LED Desk Table Lamp
+64,Aromatherapy Essential Oil Diffuser;Smart LED Ambient Room Strip;Ceramic Matte Coffee Mug 350ml
+65,Smart LED Ambient Room Strip;Minimalist LED Desk Table Lamp
+66,Smart LED Ambient Room Strip;Minimalist LED Desk Table Lamp;Aromatherapy Essential Oil Diffuser
+67,Smart LED Ambient Room Strip;Aromatherapy Essential Oil Diffuser
+68,Minimalist LED Desk Table Lamp;Smart LED Ambient Room Strip
+69,Aromatherapy Essential Oil Diffuser;Minimalist LED Desk Table Lamp;Smart LED Ambient Room Strip
+70,Smart LED Ambient Room Strip;Minimalist LED Desk Table Lamp
+71,Urban Commuter Travel Backpack;Insulated Stainless Steel Water Bottle;Polarized UV Protection Sunglasses
+72,Urban Commuter Travel Backpack;Insulated Stainless Steel Water Bottle;All-Weather Windbreaker Jacket
+73,Urban Commuter Travel Backpack;Polarized UV Protection Sunglasses;All-Weather Windbreaker Jacket
+74,Urban Commuter Travel Backpack;Insulated Stainless Steel Water Bottle
+75,Urban Commuter Travel Backpack;Premium Water-Resistant Laptop Bag;Insulated Stainless Steel Water Bottle
+76,Urban Commuter Travel Backpack;20000mAh Fast Charging Power Bank;Insulated Stainless Steel Water Bottle
+77,Urban Commuter Travel Backpack;Polarized UV Protection Sunglasses;Insulated Stainless Steel Water Bottle
+78,Insulated Stainless Steel Water Bottle;Urban Commuter Travel Backpack;Fitness Smart Watch Ultra
+79,Urban Commuter Travel Backpack;Insulated Stainless Steel Water Bottle;Performance Breathable Running Shoes
+80,Urban Commuter Travel Backpack;All-Weather Windbreaker Jacket;Polarized UV Protection Sunglasses
+81,Classic Crewneck Cotton T-Shirt;Classic Slim-Fit Denim Jeans;Genuine Leather Casual Belt
+82,Classic Crewneck Cotton T-Shirt;Classic Slim-Fit Denim Jeans;Polarized UV Protection Sunglasses
+83,Classic Crewneck Cotton T-Shirt;Genuine Leather Casual Belt
+84,Classic Crewneck Cotton T-Shirt;Classic Slim-Fit Denim Jeans
+85,Classic Crewneck Cotton T-Shirt;All-Weather Windbreaker Jacket;Classic Slim-Fit Denim Jeans
+86,Classic Slim-Fit Denim Jeans;Genuine Leather Casual Belt;Classic Crewneck Cotton T-Shirt
+87,Classic Crewneck Cotton T-Shirt;Genuine Leather Casual Belt;Polarized UV Protection Sunglasses
+88,Classic Crewneck Cotton T-Shirt;Classic Slim-Fit Denim Jeans
+89,Classic Crewneck Cotton T-Shirt;All-Weather Windbreaker Jacket
+90,Classic Slim-Fit Denim Jeans;Genuine Leather Casual Belt
+91,Performance Breathable Running Shoes;Athletic Breathable Cotton Socks;Insulated Stainless Steel Water Bottle
+92,Performance Breathable Running Shoes;Athletic Breathable Cotton Socks;Fitness Smart Watch Ultra
+93,Performance Breathable Running Shoes;Athletic Breathable Cotton Socks
+94,Performance Breathable Running Shoes;Athletic Breathable Cotton Socks;Classic Slim-Fit Denim Jeans
+95,Performance Breathable Running Shoes;Insulated Stainless Steel Water Bottle
+96,Performance Breathable Running Shoes;Athletic Breathable Cotton Socks;Urban Commuter Travel Backpack
+97,Performance Breathable Running Shoes;Athletic Breathable Cotton Socks
+98,Performance Breathable Running Shoes;Athletic Breathable Cotton Socks;Fitness Smart Watch Ultra
+99,Athletic Breathable Cotton Socks;Performance Breathable Running Shoes
+100,Performance Breathable Running Shoes;Athletic Breathable Cotton Socks
+101,All-Weather Windbreaker Jacket;Polarized UV Protection Sunglasses;Urban Commuter Travel Backpack
+102,All-Weather Windbreaker Jacket;Polarized UV Protection Sunglasses;Classic Slim-Fit Denim Jeans
+103,All-Weather Windbreaker Jacket;Classic Crewneck Cotton T-Shirt;Polarized UV Protection Sunglasses
+104,Polarized UV Protection Sunglasses;All-Weather Windbreaker Jacket
+105,All-Weather Windbreaker Jacket;Urban Commuter Travel Backpack
+106,Polarized UV Protection Sunglasses;Classic Crewneck Cotton T-Shirt;Genuine Leather Casual Belt
+107,Polarized UV Protection Sunglasses;All-Weather Windbreaker Jacket;Urban Commuter Travel Backpack
+108,All-Weather Windbreaker Jacket;Classic Slim-Fit Denim Jeans
+109,Polarized UV Protection Sunglasses;All-Weather Windbreaker Jacket
+110,All-Weather Windbreaker Jacket;Polarized UV Protection Sunglasses;Classic Crewneck Cotton T-Shirt
+111,USB 3.0 High-Speed Hub 7-Port;Laptop Stand Aluminum Adjustable;UltraBook Pro 15
+112,USB 3.0 High-Speed Hub 7-Port;Braided Type-C USB Fast Cable;UltraBook Pro 15
+113,USB 3.0 High-Speed Hub 7-Port;Laptop Stand Aluminum Adjustable;Ergonomic Wireless Mouse
+114,USB 3.0 High-Speed Hub 7-Port;Braided Type-C USB Fast Cable;65W GaN Multi-Port Fast Charger
+115,20000mAh Fast Charging Power Bank;65W GaN Multi-Port Fast Charger;Braided Type-C USB Fast Cable
+116,20000mAh Fast Charging Power Bank;Braided Type-C USB Fast Cable;SmartPhone Galaxy Pro
+117,20000mAh Fast Charging Power Bank;Braided Type-C USB Fast Cable;iPhone Pro Max Edition
+118,65W GaN Multi-Port Fast Charger;Braided Type-C USB Fast Cable;UltraBook Pro 15
+119,Laptop Stand Aluminum Adjustable;USB 3.0 High-Speed Hub 7-Port;Braided Type-C USB Fast Cable
+120,20000mAh Fast Charging Power Bank;65W GaN Multi-Port Fast Charger;Braided Type-C USB Fast Cable
+121,Wireless Noise-Cancelling Headphones;True Wireless Earbuds;Braided Type-C USB Fast Cable
+122,Wireless Noise-Cancelling Headphones;20000mAh Fast Charging Power Bank;Braided Type-C USB Fast Cable
+255,UltraBook Pro 15
+256,UltraBook Pro 15;Gaming Laptop Beast X
+257,SmartPhone Galaxy Pro
+258,UltraBook Pro 15
+259,Classic Crewneck Cotton T-Shirt

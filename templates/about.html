@@ -1,0 +1,173 @@
+{% extends 'base.html' %}
+
+{% block title %}About &amp; Viva Voce Guide – SmartShop{% endblock %}
+
+{% block content %}
+<div class="container mb-5">
+  <!-- Header -->
+  <div class="text-center mb-5">
+    <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-3 py-1 font-mono mb-2">
+      DATA MINING MINI PROJECT REPORT
+    </span>
+    <h1 class="display-6 fw-extrabold text-dark">About SmartShop Recommendation System</h1>
+    <p class="lead text-muted col-lg-8 mx-auto">
+      Comprehensive documentation, theoretical background, and presentation viva guide for college examinations.
+    </p>
+  </div>
+
+  <div class="row g-4 mb-5">
+    <!-- Project Overview -->
+    <div class="col-lg-8">
+      <div class="card border-0 shadow-sm rounded-4 p-4 p-md-5 bg-white mb-4">
+        <h3 class="fw-bold mb-3"><i class="bi bi-bullseye text-primary me-2"></i> Project Objective</h3>
+        <p class="text-secondary leading-relaxed">
+          The primary objective of <strong>SmartShop</strong> is to bridge the gap between theoretical <strong>Data Mining</strong> algorithms and real-world <strong>E-Commerce</strong> applications. Instead of static or arbitrary product recommendations, this website implements an active, end-to-end <strong>Association Rule Mining</strong> system driven by the <strong>Apriori Algorithm</strong> over realistic customer transaction baskets.
+        </p>
+
+        <h4 class="fw-bold mt-4 mb-3"><i class="bi bi-diagram-3 text-success me-2"></i> Core Data Mining Technique</h4>
+        <p class="text-secondary leading-relaxed">
+          In transactional databases, customers frequently purchase specific sets of products in conjunction (known as <em>Market Basket Analysis</em>). For example, a customer buying an <em>UltraBook Laptop</em> often also purchases an <em>Ergonomic Mouse</em> and a <em>Laptop Bag</em>.
+        </p>
+        <p class="text-secondary leading-relaxed">
+          The <strong>Apriori Algorithm</strong> systematically discovers these co-occurrence patterns by exploiting the <strong>Apriori Property</strong> (also known as the <em>Anti-monotonicity property of Support</em>):
+        </p>
+        <div class="p-3 bg-light rounded-3 border font-mono small text-dark mb-3">
+          <strong>The Apriori Principle:</strong> "All non-empty subsets of a frequent itemset must also be frequent."<br>
+          Conversely: "If an itemset is infrequent, then all of its supersets will also be infrequent and can be pruned immediately."
+        </div>
+
+        <h4 class="fw-bold mt-4 mb-3"><i class="bi bi-layers text-info me-2"></i> Technologies Utilized</h4>
+        <div class="row g-3">
+          <div class="col-md-6">
+            <div class="p-3 bg-light rounded-3 border">
+              <div class="fw-bold text-dark">Python &amp; Flask</div>
+              <div class="text-muted small">Lightweight web server routing, session authentication, and dynamic template rendering.</div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="p-3 bg-light rounded-3 border">
+              <div class="fw-bold text-dark">Mlxtend &amp; Pandas</div>
+              <div class="text-muted small">DataFrame operations, One-Hot Transaction Encoding, and Apriori association rule generation.</div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="p-3 bg-light rounded-3 border">
+              <div class="fw-bold text-dark">SQLite Database</div>
+              <div class="text-muted small">Relational persistence for users, products, orders, views, and generated recommendation rules.</div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="p-3 bg-light rounded-3 border">
+              <div class="fw-bold text-dark">Chart.js &amp; Bootstrap 5</div>
+              <div class="text-muted small">Interactive analytics charts, responsive layout, and modern glassmorphic aesthetics.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- College Presentation / Viva Voce Q&A -->
+      <div class="card border-0 shadow-sm rounded-4 p-4 p-md-5 bg-white">
+        <h3 class="fw-bold mb-4"><i class="bi bi-patch-question-fill text-warning me-2"></i> College Presentation Viva Voce Q&amp;A</h3>
+
+        <div class="accordion" id="vivaAccordion">
+          <!-- Question 1 -->
+          <div class="accordion-item border rounded-3 mb-3">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#q1">
+                1. What is Association Rule Mining?
+              </button>
+            </h2>
+            <div id="q1" class="accordion-collapse collapse" data-bs-parent="#vivaAccordion">
+              <div class="accordion-body text-secondary small">
+                Association Rule Mining is an unsupervised data mining technique that discovers interesting correlations, frequent patterns, and associations between sets of items in transaction databases. Rules are expressed in the form $A \rightarrow B$, meaning "if itemset A occurs, itemset B is also likely to occur".
+              </div>
+            </div>
+          </div>
+
+          <!-- Question 2 -->
+          <div class="accordion-item border rounded-3 mb-3">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#q2">
+                2. What are Support, Confidence, and Lift?
+              </button>
+            </h2>
+            <div id="q2" class="accordion-collapse collapse" data-bs-parent="#vivaAccordion">
+              <div class="accordion-body text-secondary small">
+                <ul>
+                  <li><strong>Support:</strong> Measures how frequently the itemset appears in the dataset. Formula: $\text{Support}(A \rightarrow B) = \frac{\text{count}(A \cup B)}{N}$.</li>
+                  <li><strong>Confidence:</strong> Measures how often rule $A \rightarrow B$ is true. Formula: $\text{Confidence}(A \rightarrow B) = \frac{\text{Support}(A \cup B)}{\text{Support}(A)}$.</li>
+                  <li><strong>Lift:</strong> Measures the strength of association compared to random chance. Formula: $\text{Lift}(A \rightarrow B) = \frac{\text{Confidence}(A \rightarrow B)}{\text{Support}(B)}$. If Lift &gt; 1, the products have a positive correlation.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- Question 3 -->
+          <div class="accordion-item border rounded-3 mb-3">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#q3">
+                3. How does the Apriori property optimize candidate itemset generation?
+              </button>
+            </h2>
+            <div id="q3" class="accordion-collapse collapse" data-bs-parent="#vivaAccordion">
+              <div class="accordion-body text-secondary small">
+                Without pruning, generating all possible itemsets requires exploring $2^d - 1$ combinations (exponential complexity). The Apriori property states that all non-empty subsets of a frequent itemset must be frequent. Therefore, if any $(k-1)$-subset of candidate $C_k$ is infrequent, $C_k$ can be immediately pruned without scanning the entire database, drastically reducing computational cost.
+              </div>
+            </div>
+          </div>
+
+          <!-- Question 4 -->
+          <div class="accordion-item border rounded-3 mb-3">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#q4">
+                4. What happens when a product has no association rules?
+              </button>
+            </h2>
+            <div id="q4" class="accordion-collapse collapse" data-bs-parent="#vivaAccordion">
+              <div class="accordion-body text-secondary small">
+                In real-world e-commerce, this is known as the "Cold Start" problem or infrequent item issue. SmartShop incorporates a hybrid fallback: if no rule meets the minimum thresholds, it dynamically serves top-rated popular products within the same category so the customer never encounters an empty recommendation carousel.
+              </div>
+            </div>
+          </div>
+
+          <!-- Question 5 -->
+          <div class="accordion-item border rounded-3 mb-3">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#q5">
+                5. How does SmartShop differ from collaborative filtering?
+              </button>
+            </h2>
+            <div id="q5" class="accordion-collapse collapse" data-bs-parent="#vivaAccordion">
+              <div class="accordion-body text-secondary small">
+                Collaborative filtering relies on user-to-user rating matrices or matrix factorization. Association Rule Mining focuses on transaction-level item co-occurrence (Market Basket Analysis), which does not require explicit star ratings and works effectively for cross-selling and impulse purchases directly in the shopping cart.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Presentation Checklist & Demonstration Steps -->
+    <div class="col-lg-4">
+      <div class="card border-0 shadow-sm rounded-4 p-4 bg-white sticky-top" style="top: 90px;">
+        <h5 class="fw-bold mb-3"><i class="bi bi-easel2 text-danger me-2"></i> Presentation Demo Steps</h5>
+        <p class="text-muted small mb-3">Follow these step-by-step instructions to deliver a stellar 5-minute college demonstration:</p>
+
+        <ol class="small text-secondary ps-3 mb-4 d-flex flex-column gap-2">
+          <li><strong>Step 1: Homepage Showcase</strong> &ndash; Show the hero banner, catalog categories, and the Data Mining spotlight badge.</li>
+          <li><strong>Step 2: Product Page Mining</strong> &ndash; Open <em>"UltraBook Pro 15"</em>. Point out the <em>"You May Also Like"</em> section showing the Mouse &amp; Bag with their <em>Lift: 2.34x</em> badge.</li>
+          <li><strong>Step 3: Recommendation Hub</strong> &ndash; Open <code>/recommendations</code>. Show the 7-stage pipeline and run the interactive simulator for the examiner.</li>
+          <li><strong>Step 4: Data Mining Dashboard</strong> &ndash; Navigate to <code>/dashboard</code>. Showcase the Chart.js visual charts (Top Products, Category distribution, Lift bar chart).</li>
+          <li><strong>Step 5: Rules Table</strong> &ndash; Open <code>/rules</code>. Demonstrate live filtering by typing "Mouse" or dragging the confidence filter. Export CSV.</li>
+          <li><strong>Step 6: Live Checkout &amp; Retrain</strong> &ndash; Add items to cart, checkout with demo payment, and click <em>"Retrain Apriori Model"</em> in the Admin Panel to show real-time dynamic learning!</li>
+        </ol>
+
+        <div class="p-3 bg-light rounded-3 border text-center small">
+          <div class="fw-bold text-dark mb-1">Quick Admin Access</div>
+          <div class="text-muted"><code>admin@smartshop.com</code> / <code>admin123</code></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

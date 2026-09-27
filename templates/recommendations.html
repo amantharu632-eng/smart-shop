@@ -1,0 +1,256 @@
+{% extends 'base.html' %}
+
+{% block title %}Recommendation Engine &amp; Apriori Architecture – SmartShop{% endblock %}
+
+{% block content %}
+<div class="container mb-5">
+  <!-- Page Header -->
+  <div class="text-center mb-5">
+    <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-3 py-1 font-mono mb-2">
+      DATA MINING MINI PROJECT ARCHITECTURE
+    </span>
+    <h1 class="display-6 fw-extrabold text-dark">Association Rule Mining with Apriori</h1>
+    <p class="lead text-muted col-lg-8 mx-auto">
+      Discover how SmartShop translates real-world customer transaction baskets into actionable, high-lift item recommendations using Market Basket Analysis.
+    </p>
+  </div>
+
+  <!-- End-to-End Visual Pipeline Steps -->
+  <div class="mb-5">
+    <div class="d-flex align-items-center justify-content-between mb-4">
+      <h3 class="fw-bold mb-0">The 7-Stage Data Mining Pipeline</h3>
+      <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-1">Fully Functional &bull; Live Engine</span>
+    </div>
+
+    <div class="row g-3">
+      <!-- Step 1 -->
+      <div class="col-12 col-md-6 col-lg-3">
+        <div class="pipeline-step h-100">
+          <div class="pipeline-step-num">1</div>
+          <h6 class="fw-bold text-dark">Raw Transactions</h6>
+          <p class="text-muted small mb-0">Customer transactions logged into SQLite and CSV format: <code>{Laptop, Mouse, Bag}</code>.</p>
+        </div>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="col-12 col-md-6 col-lg-3">
+        <div class="pipeline-step h-100">
+          <div class="pipeline-step-num">2</div>
+          <h6 class="fw-bold text-dark">Data Preprocessing</h6>
+          <p class="text-muted small mb-0">Itemsets are encoded into a binary boolean matrix via <code>TransactionEncoder</code>.</p>
+        </div>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="col-12 col-md-6 col-lg-3">
+        <div class="pipeline-step h-100">
+          <div class="pipeline-step-num">3</div>
+          <h6 class="fw-bold text-dark">Frequent Itemsets</h6>
+          <p class="text-muted small mb-0">Apriori algorithm generates $C_k$ candidates and prunes any itemset with $\text{Support} < \text{min\_sup}$.</p>
+        </div>
+      </div>
+
+      <!-- Step 4 -->
+      <div class="col-12 col-md-6 col-lg-3">
+        <div class="pipeline-step h-100">
+          <div class="pipeline-step-num">4</div>
+          <h6 class="fw-bold text-dark">Rule Generation</h6>
+          <p class="text-muted small mb-0">Extracts association rules $A \rightarrow B$ meeting threshold criteria ($\text{Confidence} \ge 15\%$, $\text{Lift} \ge 1.0$).</p>
+        </div>
+      </div>
+
+      <!-- Step 5 -->
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="pipeline-step h-100">
+          <div class="pipeline-step-num">5</div>
+          <h6 class="fw-bold text-dark">Metric Evaluation</h6>
+          <p class="text-muted small mb-0">Computes mathematical <strong>Support</strong>, <strong>Confidence</strong>, and <strong>Lift</strong> for each candidate rule.</p>
+        </div>
+      </div>
+
+      <!-- Step 6 -->
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="pipeline-step h-100">
+          <div class="pipeline-step-num">6</div>
+          <h6 class="fw-bold text-dark">Sorting &amp; Filtering</h6>
+          <p class="text-muted small mb-0">Rules sorted by descending Lift and Confidence. Redundant or low-correlation items are pruned.</p>
+        </div>
+      </div>
+
+      <!-- Step 7 -->
+      <div class="col-12 col-md-12 col-lg-4">
+        <div class="pipeline-step h-100">
+          <div class="pipeline-step-num">7</div>
+          <h6 class="fw-bold text-dark">Live Delivery to User</h6>
+          <p class="text-muted small mb-0">When viewing or adding items to cart, matching consequents are rendered as "You May Also Like".</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mathematical Formula Cards -->
+  <div class="card border-0 shadow-sm rounded-4 p-4 p-lg-5 bg-white mb-5">
+    <h3 class="fw-bold mb-4">Core Mathematical Formulas</h3>
+    <div class="row g-4">
+      <!-- Support -->
+      <div class="col-lg-4">
+        <div class="p-4 bg-light rounded-4 border h-100">
+          <div class="d-flex align-items-center justify-content-between mb-2">
+            <h5 class="fw-bold text-primary mb-0">1. Support</h5>
+            <span class="badge bg-info-subtle text-info border border-info-subtle font-mono">Frequency</span>
+          </div>
+          <p class="text-muted small mb-3">Probability that a transaction contains both itemsets A and B together.</p>
+          <div class="p-3 bg-white rounded-3 border text-center font-mono fw-bold mb-3 text-dark">
+            Support(A &rarr; B) = <span class="text-primary">&sigma;(A &cup; B) / N</span>
+          </div>
+          <ul class="text-muted small ps-3 mb-0">
+            <li><strong>&sigma;(A &cup; B):</strong> Transactions containing both A and B.</li>
+            <li><strong>N:</strong> Total transactions in the database ({{ total_transactions }}).</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Confidence -->
+      <div class="col-lg-4">
+        <div class="p-4 bg-light rounded-4 border h-100">
+          <div class="d-flex align-items-center justify-content-between mb-2">
+            <h5 class="fw-bold text-success mb-0">2. Confidence</h5>
+            <span class="badge bg-success-subtle text-success border border-success-subtle font-mono">Certainty</span>
+          </div>
+          <p class="text-muted small mb-3">Conditional probability that B is purchased given that A is already purchased.</p>
+          <div class="p-3 bg-white rounded-3 border text-center font-mono fw-bold mb-3 text-dark">
+            Confidence(A &rarr; B) = <span class="text-success">Support(A &cup; B) / Support(A)</span>
+          </div>
+          <ul class="text-muted small ps-3 mb-0">
+            <li>Answers: <em>"If a user buys A, how likely is it they will also buy B?"</em></li>
+            <li>Range: 0.0 to 1.0 (0% to 100%).</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Lift -->
+      <div class="col-lg-4">
+        <div class="p-4 bg-light rounded-4 border h-100">
+          <div class="d-flex align-items-center justify-content-between mb-2">
+            <h5 class="fw-bold text-purple mb-0" style="color: #7e22ce;">3. Lift</h5>
+            <span class="badge bg-purple-subtle text-purple border font-mono" style="background:#f3e8ff; color:#7e22ce;">Strength</span>
+          </div>
+          <p class="text-muted small mb-3">Ratio of the observed joint support to that expected under independence.</p>
+          <div class="p-3 bg-white rounded-3 border text-center font-mono fw-bold mb-3 text-dark">
+            Lift(A &rarr; B) = <span style="color:#7e22ce;">Confidence(A &rarr; B) / Support(B)</span>
+          </div>
+          <ul class="text-muted small ps-3 mb-0">
+            <li><strong>Lift = 1:</strong> A and B are independent.</li>
+            <li><strong>Lift &gt; 1:</strong> Strong positive correlation (Good for recommendations!).</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Interactive Apriori Rule Simulator -->
+  <div class="card border-0 shadow-lg rounded-4 p-4 p-lg-5 bg-white mb-5" id="simulator-section">
+    <div class="d-flex align-items-center justify-content-between mb-4 border-bottom pb-3">
+      <div>
+        <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-3 py-1 font-mono mb-1">
+          LIVE DEMO SIMULATOR
+        </span>
+        <h3 class="fw-bold mb-0">Interactive Apriori Rule Simulator</h3>
+      </div>
+      <span class="text-muted small">Select any product to inspect discovered rules</span>
+    </div>
+
+    <div class="row g-4 align-items-center mb-4">
+      <div class="col-md-8">
+        <label class="form-label fw-bold text-dark">Select Antecedent Product (Item A):</label>
+        <select class="form-select form-select-lg rounded-pill" id="sim-product-select" onchange="runSimulation()">
+          {% for p in all_products %}
+            <option value="{{ p.name }}" {% if loop.first %}selected{% endif %}>{{ p.name }} ({{ p.category }})</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-md-4 text-md-end mt-md-4">
+        <button class="btn btn-primary-custom px-4 py-2" onclick="runSimulation()">
+          <i class="bi bi-play-circle me-1"></i> Simulate Mining
+        </button>
+      </div>
+    </div>
+
+    <!-- Simulator Results Area -->
+    <div id="sim-results" class="p-4 bg-light rounded-4 border">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="fw-bold mb-0 text-dark">Discovered Association Rules for <span id="sim-selected-name" class="text-primary font-mono"></span>:</h5>
+        <span id="sim-rules-count" class="badge bg-primary rounded-pill">0 Rules</span>
+      </div>
+
+      <div id="sim-rules-container" class="row g-3">
+        <!-- Injected via JavaScript -->
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  // Pass all mined rules to JS for the simulator
+  const ALL_RULES = {{ all_rules_json|safe }};
+
+  function runSimulation() {
+    const select = document.getElementById('sim-product-select');
+    const selectedProduct = select.value;
+    document.getElementById('sim-selected-name').innerText = selectedProduct;
+
+    const matchedRules = ALL_RULES.filter(r => {
+      const ants = r.antecedents.split(',').map(s => s.trim().toLowerCase());
+      return ants.includes(selectedProduct.toLowerCase());
+    });
+
+    const countBadge = document.getElementById('sim-rules-count');
+    const container = document.getElementById('sim-rules-container');
+    countBadge.innerText = `${matchedRules.length} Rules Found`;
+
+    if (matchedRules.length === 0) {
+      container.innerHTML = `
+        <div class="col-12 text-center py-4 text-muted">
+          <i class="bi bi-info-circle fs-3 d-block mb-2"></i>
+          No association rules directly generated for "${selectedProduct}" at the current minimum support (0.03) and confidence (0.15) thresholds.
+          The store will use Category Fallback recommendations for this product.
+        </div>
+      `;
+      return;
+    }
+
+    let html = '';
+    matchedRules.forEach(r => {
+      html += `
+        <div class="col-md-6">
+          <div class="p-3 bg-white rounded-3 border h-100 shadow-sm">
+            <div class="d-flex justify-content-between align-items-start mb-2">
+              <span class="badge bg-purple-subtle text-purple border small" style="background:#f3e8ff; color:#7e22ce;">
+                Lift: ${r.lift.toFixed(2)}x
+              </span>
+              <span class="text-success small fw-bold font-mono">Conf: ${(r.confidence * 100).toFixed(1)}%</span>
+            </div>
+            <div class="fw-bold text-dark mb-1 font-mono small">
+              {${r.antecedents}} &rarr; <span class="text-primary">{${r.consequents}}</span>
+            </div>
+            <div class="d-flex gap-2 mt-2">
+              <span class="metric-badge badge-support">Support: ${r.support.toFixed(3)}</span>
+              <span class="metric-badge badge-confidence">Confidence: ${(r.confidence * 100).toFixed(0)}%</span>
+            </div>
+            <p class="text-muted small mt-2 mb-0">
+              Interpretation: When a user buys <strong>${r.antecedents}</strong>, there is a <strong>${(r.confidence * 100).toFixed(0)}%</strong> chance they will purchase <strong>${r.consequents}</strong> (which is <strong>${r.lift.toFixed(2)}x</strong> more frequent than random chance).
+            </p>
+          </div>
+        </div>
+      `;
+    });
+
+    container.innerHTML = html;
+  }
+
+  // Run on page load
+  document.addEventListener('DOMContentLoaded', runSimulation);
+</script>
+{% endblock %}
