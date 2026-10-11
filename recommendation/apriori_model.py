@@ -1,6 +1,6 @@
 """
-SmartShop Recommendation Engine
-===============================
+Shopping Recommendation System Engine
+=====================================
 Implements Association Rule Mining using the Apriori Algorithm.
 Supports both mlxtend library integration and a standalone educational
 pure-Python Apriori engine for demonstration and resilience.

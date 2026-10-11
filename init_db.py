@@ -1,6 +1,6 @@
 """
-Database Initialization Script for SmartShop
-============================================
+Database Initialization Script for Shopping Recommendation System
+=================================================================
 Creates SQLite schema, seeds initial products, default users,
 historical transaction data, and executes the Apriori model to populate
 the recommendations table.
@@ -357,7 +357,7 @@ def init_database():
 
     conn.commit()
     conn.close()
-    print("[OK] Database initialized successfully! Ready to run SmartShop.")
+    print("[OK] Database initialized successfully! Ready to run Shopping Recommendation System.")
 
 
 if __name__ == '__main__':

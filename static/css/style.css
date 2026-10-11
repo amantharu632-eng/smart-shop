@@ -1,5 +1,5 @@
 /* ===================================================================
-   SmartShop – Modern E-Commerce & Data Mining Design System
+   Shopping Recommendation System – Modern E-Commerce & Data Mining Design System
    =================================================================== */
 
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
@@ -106,12 +106,12 @@ h1, h2, h3, h4, h5, h6 {
 
 .navbar-brand {
   font-weight: 800;
-  font-size: 1.4rem;
+  font-size: 1.15rem;
   display: flex;
   align-items: center;
   gap: 8px;
   color: var(--gray-900);
-  letter-spacing: -0.03em;
+  letter-spacing: -0.02em;
 }
 
 .brand-icon {

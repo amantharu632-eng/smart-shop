@@ -1,4 +1,4 @@
 """
-SmartShop Recommendation Engine Package
+Shopping Recommendation System Package
 Association Rule Mining with Apriori Algorithm
 """

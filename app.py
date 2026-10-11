@@ -1,6 +1,6 @@
 """
-SmartShop – Shopping Recommendation System
-==========================================
+Shopping Recommendation System
+==============================
 Data Mining Mini Project using Flask, SQLite, and the Apriori Algorithm.
 Demonstrates Market Basket Analysis, Association Rule Mining, and
 real-time personalized product recommendations.
@@ -1003,7 +1003,7 @@ def register():
         session['user_email'] = email
         session['is_admin'] = 0
 
-        flash("Account created successfully! Welcome to SmartShop.", "success")
+        flash("Account created successfully! Welcome to Shopping Recommendation System.", "success")
         return redirect(url_for('index'))
 
     return render_template('register.html')
@@ -1138,7 +1138,7 @@ def profile():
 def recommendations_page():
     """
     Academic showcase page:
-    Visualizes the 7-stage Data Mining pipeline and provides an
+    Visualizes the 6-stage Data Mining pipeline and provides an
     interactive simulator for Association Rule Mining.
     """
     conn = get_db()
@@ -1147,7 +1147,24 @@ def recommendations_page():
     cursor.execute("SELECT * FROM products ORDER BY name ASC")
     all_products = [dict(r) for r in cursor.fetchall()]
 
-    cursor.execute("SELECT antecedent as antecedents, consequent as consequents, support, confidence, lift FROM recommendations ORDER BY lift DESC")
+    cursor.execute("""
+        SELECT 
+            r.id,
+            r.antecedent as antecedents, 
+            r.consequent as consequents, 
+            r.support, 
+            r.confidence, 
+            r.lift,
+            p.id as consequent_id,
+            p.name as consequent_name,
+            p.price as consequent_price,
+            p.category as consequent_category,
+            p.image as consequent_image,
+            p.rating as consequent_rating
+        FROM recommendations r
+        LEFT JOIN products p ON r.consequent_id = p.id OR r.consequent = p.name
+        ORDER BY r.lift DESC
+    """)
     all_rules = [dict(r) for r in cursor.fetchall()]
 
     cursor.execute("SELECT COUNT(*) FROM transactions")
@@ -1158,6 +1175,7 @@ def recommendations_page():
     return render_template(
         'recommendations.html',
         all_products=all_products,
+        all_products_json=json.dumps(all_products),
         all_rules_json=json.dumps(all_rules),
         total_transactions=total_transactions
     )
@@ -1336,7 +1354,7 @@ def export_rules_csv():
     return Response(
         output.getvalue(),
         mimetype="text/csv",
-        headers={"Content-disposition": "attachment; filename=smartshop_association_rules.csv"}
+        headers={"Content-disposition": "attachment; filename=shopping_recommendation_system_association_rules.csv"}
     )
 
 
@@ -1538,10 +1556,22 @@ if __name__ == '__main__':
         import init_db
         init_db.init_database()
 
+    # Determine available port
+    import socket
+    def is_port_in_use(p):
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+            return s.connect_ex(('127.0.0.1', p)) == 0
+
+    default_port = int(os.environ.get('PORT', 5000))
+    if is_port_in_use(default_port):
+        port = 5001 if not is_port_in_use(5001) else 5050
+    else:
+        port = default_port
+
     print("\n" + "="*60)
-    print("  SmartShop – Shopping Recommendation System")
+    print("  Shopping Recommendation System")
     print("  Data Mining Mini Project (Apriori Algorithm)")
-    print("  Running at: http://127.0.0.1:5000")
+    print(f"  Running at: http://127.0.0.1:{port}")
     print("="*60 + "\n")
 
-    app.run(debug=True, host='127.0.0.1', port=5000)
+    app.run(debug=True, host='127.0.0.1', port=port)

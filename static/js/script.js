@@ -1,5 +1,5 @@
 /**
- * SmartShop – Frontend Interactions & Dynamic Recommendations
+ * Shopping Recommendation System – Frontend Interactions & Dynamic Recommendations
  */
 
 document.addEventListener('DOMContentLoaded', function () {

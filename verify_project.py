@@ -1,5 +1,5 @@
 """
-Comprehensive Verification Script for SmartShop
+Comprehensive Verification Script for Shopping Recommendation System
 Tests Flask routes, Apriori mining, database transactions, post-purchase recommendations,
 API endpoints, Order History, Buy Again, and Admin model retraining.
 """
@@ -9,7 +9,7 @@ import json
 import unittest
 from app import app, get_db
 
-class SmartShopTestCase(unittest.TestCase):
+class ShoppingRecommendationSystemTestCase(unittest.TestCase):
     def setUp(self):
         app.config['TESTING'] = True
         app.config['WTF_CSRF_ENABLED'] = False
@@ -18,7 +18,7 @@ class SmartShopTestCase(unittest.TestCase):
     def test_01_home_page(self):
         response = self.client.get('/')
         self.assertEqual(response.status_code, 200)
-        self.assertIn(b'SmartShop', response.data)
+        self.assertIn(b'Shopping Recommendation System', response.data)
         self.assertIn(b'Apriori', response.data)
         print("[PASS] 01. Home page loaded successfully.")
 

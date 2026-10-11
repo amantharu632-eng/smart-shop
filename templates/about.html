@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}About &amp; Viva Voce Guide – SmartShop{% endblock %}
+{% block title %}About &amp; Viva Voce Guide – Shopping Recommendation System{% endblock %}
 
 {% block content %}
 <div class="container mb-5">
@@ -9,7 +9,7 @@
     <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-3 py-1 font-mono mb-2">
       DATA MINING MINI PROJECT REPORT
     </span>
-    <h1 class="display-6 fw-extrabold text-dark">About SmartShop Recommendation System</h1>
+    <h1 class="display-6 fw-extrabold text-dark">About Shopping Recommendation System</h1>
     <p class="lead text-muted col-lg-8 mx-auto">
       Comprehensive documentation, theoretical background, and presentation viva guide for college examinations.
     </p>
@@ -21,7 +21,7 @@
       <div class="card border-0 shadow-sm rounded-4 p-4 p-md-5 bg-white mb-4">
         <h3 class="fw-bold mb-3"><i class="bi bi-bullseye text-primary me-2"></i> Project Objective</h3>
         <p class="text-secondary leading-relaxed">
-          The primary objective of <strong>SmartShop</strong> is to bridge the gap between theoretical <strong>Data Mining</strong> algorithms and real-world <strong>E-Commerce</strong> applications. Instead of static or arbitrary product recommendations, this website implements an active, end-to-end <strong>Association Rule Mining</strong> system driven by the <strong>Apriori Algorithm</strong> over realistic customer transaction baskets.
+          The primary objective of <strong>Shopping Recommendation System</strong> is to bridge the gap between theoretical <strong>Data Mining</strong> algorithms and real-world <strong>E-Commerce</strong> applications. Instead of static or arbitrary product recommendations, this website implements an active, end-to-end <strong>Association Rule Mining</strong> system driven by the <strong>Apriori Algorithm</strong> over realistic customer transaction baskets.
         </p>
 
         <h4 class="fw-bold mt-4 mb-3"><i class="bi bi-diagram-3 text-success me-2"></i> Core Data Mining Technique</h4>
@@ -125,7 +125,7 @@
             </h2>
             <div id="q4" class="accordion-collapse collapse" data-bs-parent="#vivaAccordion">
               <div class="accordion-body text-secondary small">
-                In real-world e-commerce, this is known as the "Cold Start" problem or infrequent item issue. SmartShop incorporates a hybrid fallback: if no rule meets the minimum thresholds, it dynamically serves top-rated popular products within the same category so the customer never encounters an empty recommendation carousel.
+                In real-world e-commerce, this is known as the "Cold Start" problem or infrequent item issue. The Shopping Recommendation System incorporates a hybrid fallback: if no rule meets the minimum thresholds, it dynamically serves top-rated popular products within the same category so the customer never encounters an empty recommendation carousel.
               </div>
             </div>
           </div>
@@ -134,7 +134,7 @@
           <div class="accordion-item border rounded-3 mb-3">
             <h2 class="accordion-header">
               <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#q5">
-                5. How does SmartShop differ from collaborative filtering?
+                5. How does the Shopping Recommendation System differ from collaborative filtering?
               </button>
             </h2>
             <div id="q5" class="accordion-collapse collapse" data-bs-parent="#vivaAccordion">
@@ -156,7 +156,7 @@
         <ol class="small text-secondary ps-3 mb-4 d-flex flex-column gap-2">
           <li><strong>Step 1: Homepage Showcase</strong> &ndash; Show the hero banner, catalog categories, and the Data Mining spotlight badge.</li>
           <li><strong>Step 2: Product Page Mining</strong> &ndash; Open <em>"UltraBook Pro 15"</em>. Point out the <em>"You May Also Like"</em> section showing the Mouse &amp; Bag with their <em>Lift: 2.34x</em> badge.</li>
-          <li><strong>Step 3: Recommendation Hub</strong> &ndash; Open <code>/recommendations</code>. Show the 7-stage pipeline and run the interactive simulator for the examiner.</li>
+          <li><strong>Step 3: Recommendation Hub</strong> &ndash; Open <code>/recommendations</code>. Show the 6-stage pipeline and run the interactive simulator for the examiner.</li>
           <li><strong>Step 4: Data Mining Dashboard</strong> &ndash; Navigate to <code>/dashboard</code>. Showcase the Chart.js visual charts (Top Products, Category distribution, Lift bar chart).</li>
           <li><strong>Step 5: Rules Table</strong> &ndash; Open <code>/rules</code>. Demonstrate live filtering by typing "Mouse" or dragging the confidence filter. Export CSV.</li>
           <li><strong>Step 6: Live Checkout &amp; Retrain</strong> &ndash; Add items to cart, checkout with demo payment, and click <em>"Retrain Apriori Model"</em> in the Admin Panel to show real-time dynamic learning!</li>

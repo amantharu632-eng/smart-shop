@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}Recommendation Engine &amp; Apriori Architecture – SmartShop{% endblock %}
+{% block title %}Recommendation Engine &amp; Apriori Architecture – Shopping Recommendation System{% endblock %}
 
 {% block content %}
 <div class="container mb-5">
@@ -11,20 +11,20 @@
     </span>
     <h1 class="display-6 fw-extrabold text-dark">Association Rule Mining with Apriori</h1>
     <p class="lead text-muted col-lg-8 mx-auto">
-      Discover how SmartShop translates real-world customer transaction baskets into actionable, high-lift item recommendations using Market Basket Analysis.
+      Discover how Shopping Recommendation System translates real-world customer transaction baskets into actionable, high-lift item recommendations using Market Basket Analysis.
     </p>
   </div>
 
   <!-- End-to-End Visual Pipeline Steps -->
   <div class="mb-5">
     <div class="d-flex align-items-center justify-content-between mb-4">
-      <h3 class="fw-bold mb-0">The 7-Stage Data Mining Pipeline</h3>
+      <h3 class="fw-bold mb-0">The 6-Stage Data Mining Pipeline</h3>
       <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-1">Fully Functional &bull; Live Engine</span>
     </div>
 
     <div class="row g-3">
       <!-- Step 1 -->
-      <div class="col-12 col-md-6 col-lg-3">
+      <div class="col-12 col-md-6 col-lg-4">
         <div class="pipeline-step h-100">
           <div class="pipeline-step-num">1</div>
           <h6 class="fw-bold text-dark">Raw Transactions</h6>
@@ -33,7 +33,7 @@
       </div>
 
       <!-- Step 2 -->
-      <div class="col-12 col-md-6 col-lg-3">
+      <div class="col-12 col-md-6 col-lg-4">
         <div class="pipeline-step h-100">
           <div class="pipeline-step-num">2</div>
           <h6 class="fw-bold text-dark">Data Preprocessing</h6>
@@ -42,7 +42,7 @@
       </div>
 
       <!-- Step 3 -->
-      <div class="col-12 col-md-6 col-lg-3">
+      <div class="col-12 col-md-6 col-lg-4">
         <div class="pipeline-step h-100">
           <div class="pipeline-step-num">3</div>
           <h6 class="fw-bold text-dark">Frequent Itemsets</h6>
@@ -51,7 +51,7 @@
       </div>
 
       <!-- Step 4 -->
-      <div class="col-12 col-md-6 col-lg-3">
+      <div class="col-12 col-md-6 col-lg-4">
         <div class="pipeline-step h-100">
           <div class="pipeline-step-num">4</div>
           <h6 class="fw-bold text-dark">Rule Generation</h6>
@@ -74,15 +74,6 @@
           <div class="pipeline-step-num">6</div>
           <h6 class="fw-bold text-dark">Sorting &amp; Filtering</h6>
           <p class="text-muted small mb-0">Rules sorted by descending Lift and Confidence. Redundant or low-correlation items are pruned.</p>
-        </div>
-      </div>
-
-      <!-- Step 7 -->
-      <div class="col-12 col-md-12 col-lg-4">
-        <div class="pipeline-step h-100">
-          <div class="pipeline-step-num">7</div>
-          <h6 class="fw-bold text-dark">Live Delivery to User</h6>
-          <p class="text-muted small mb-0">When viewing or adding items to cart, matching consequents are rendered as "You May Also Like".</p>
         </div>
       </div>
     </div>
@@ -150,37 +141,94 @@
 
   <!-- Interactive Apriori Rule Simulator -->
   <div class="card border-0 shadow-lg rounded-4 p-4 p-lg-5 bg-white mb-5" id="simulator-section">
-    <div class="d-flex align-items-center justify-content-between mb-4 border-bottom pb-3">
+    <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between mb-4 border-bottom pb-3 gap-2">
       <div>
         <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-3 py-1 font-mono mb-1">
-          LIVE DEMO SIMULATOR
+          <i class="bi bi-cpu-fill me-1"></i> LIVE DEMO SIMULATOR
         </span>
-        <h3 class="fw-bold mb-0">Interactive Apriori Rule Simulator</h3>
+        <h3 class="fw-bold mb-0 text-dark">Interactive Apriori Rule Simulator</h3>
       </div>
-      <span class="text-muted small">Select any product to inspect discovered rules</span>
+      <span class="text-muted small">Select any product and test Market Basket Analysis with custom thresholds</span>
     </div>
 
-    <div class="row g-4 align-items-center mb-4">
-      <div class="col-md-8">
-        <label class="form-label fw-bold text-dark">Select Antecedent Product (Item A):</label>
-        <select class="form-select form-select-lg rounded-pill" id="sim-product-select" onchange="runSimulation()">
-          {% for p in all_products %}
-            <option value="{{ p.name }}" {% if loop.first %}selected{% endif %}>{{ p.name }} ({{ p.category }})</option>
-          {% endfor %}
-        </select>
+    <!-- Parameter Controls Grid -->
+    <div class="bg-light p-4 rounded-4 border mb-4">
+      <div class="row g-3 align-items-end">
+        <!-- Antecedent Selection -->
+        <div class="col-lg-5 col-md-12">
+          <label class="form-label fw-bold text-dark small mb-1" for="sim-product-select">
+            <i class="bi bi-box-seam me-1 text-primary"></i> Antecedent Item (Item A):
+          </label>
+          <select class="form-select form-select-lg rounded-pill border shadow-sm" id="sim-product-select" onchange="onProductSelectChange()">
+            {% for p in all_products %}
+              <option value="{{ p.name }}" data-category="{{ p.category }}" {% if loop.first %}selected{% endif %}>
+                {{ p.name }} ({{ p.category }})
+              </option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <!-- Min Support Slider -->
+        <div class="col-lg-3 col-sm-6">
+          <div class="d-flex justify-content-between align-items-center mb-1">
+            <label class="form-label fw-bold text-dark small mb-0" for="sim-support-slider">
+              Min Support:
+            </label>
+            <span class="badge bg-primary-subtle text-primary border border-primary-subtle font-mono small" id="sim-support-val">0.030 (3.0%)</span>
+          </div>
+          <input type="range" class="form-range" id="sim-support-slider" min="0.01" max="0.10" step="0.005" value="0.03" oninput="updateSupportLabel(this.value)">
+        </div>
+
+        <!-- Min Confidence Slider -->
+        <div class="col-lg-2 col-sm-6">
+          <div class="d-flex justify-content-between align-items-center mb-1">
+            <label class="form-label fw-bold text-dark small mb-0" for="sim-conf-slider">
+              Min Conf:
+            </label>
+            <span class="badge bg-success-subtle text-success border border-success-subtle font-mono small" id="sim-conf-val">15%</span>
+          </div>
+          <input type="range" class="form-range" id="sim-conf-slider" min="0.10" max="0.90" step="0.05" value="0.15" oninput="updateConfLabel(this.value)">
+        </div>
+
+        <!-- Simulate Button -->
+        <div class="col-lg-2 col-md-12">
+          <button id="sim-btn" class="btn btn-primary-custom w-100 py-2 rounded-pill shadow-sm d-flex align-items-center justify-content-center gap-2" type="button" onclick="triggerMiningSimulation()">
+            <i class="bi bi-play-circle-fill fs-6" id="sim-btn-icon"></i>
+            <span id="sim-btn-text">Simulate Mining</span>
+          </button>
+        </div>
       </div>
-      <div class="col-md-4 text-md-end mt-md-4">
-        <button class="btn btn-primary-custom px-4 py-2" onclick="runSimulation()">
-          <i class="bi bi-play-circle me-1"></i> Simulate Mining
-        </button>
+    </div>
+
+    <!-- Animated Mining Simulation Feedback Banner -->
+    <div id="sim-progress-box" class="mb-4 d-none">
+      <div class="p-3 bg-primary-subtle border border-primary-subtle rounded-3 shadow-sm">
+        <div class="d-flex align-items-center justify-content-between mb-2">
+          <span class="small fw-bold text-primary" id="sim-progress-status">
+            <span class="spinner-border spinner-border-sm me-2"></span> Scanning SQLite transaction baskets...
+          </span>
+          <span class="small font-mono text-muted fw-bold" id="sim-progress-pct">0%</span>
+        </div>
+        <div class="progress" style="height: 8px;">
+          <div id="sim-progress-bar" class="progress-bar progress-bar-striped progress-bar-animated bg-primary" role="progressbar" style="width: 0%"></div>
+        </div>
       </div>
     </div>
 
     <!-- Simulator Results Area -->
     <div id="sim-results" class="p-4 bg-light rounded-4 border">
-      <div class="d-flex justify-content-between align-items-center mb-3">
-        <h5 class="fw-bold mb-0 text-dark">Discovered Association Rules for <span id="sim-selected-name" class="text-primary font-mono"></span>:</h5>
-        <span id="sim-rules-count" class="badge bg-primary rounded-pill">0 Rules</span>
+      <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center mb-4 pb-2 border-bottom gap-2">
+        <div>
+          <h5 class="fw-bold mb-1 text-dark">
+            Discovered Association Rules for: <span id="sim-selected-name" class="text-primary font-mono"></span>
+          </h5>
+          <p class="text-muted small mb-0" id="sim-filter-info">
+            Thresholds: Support &ge; <span id="sim-active-sup" class="fw-bold text-dark">0.030</span> &bull; Confidence &ge; <span id="sim-active-conf" class="fw-bold text-dark">15%</span>
+          </p>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+          <span id="sim-rules-count" class="badge bg-primary rounded-pill px-3 py-2">0 Rules Found</span>
+        </div>
       </div>
 
       <div id="sim-rules-container" class="row g-3">
@@ -193,29 +241,172 @@
 
 {% block scripts %}
 <script>
-  // Pass all mined rules to JS for the simulator
+  // Pass all mined rules and products to JS for the interactive simulator
   const ALL_RULES = {{ all_rules_json|safe }};
+  const ALL_PRODUCTS = {{ all_products_json|safe if all_products_json is defined else '[]' }};
 
-  function runSimulation() {
+  function updateSupportLabel(val) {
+    const num = parseFloat(val);
+    document.getElementById('sim-support-val').innerText = `${num.toFixed(3)} (${(num * 100).toFixed(1)}%)`;
+  }
+
+  function updateConfLabel(val) {
+    const num = parseFloat(val);
+    document.getElementById('sim-conf-val').innerText = `${Math.round(num * 100)}%`;
+  }
+
+  function onProductSelectChange() {
+    // Pulse the Simulate button to invite clicking
+    const btn = document.getElementById('sim-btn');
+    if (btn) {
+      btn.classList.add('shadow-lg');
+      setTimeout(() => btn.classList.remove('shadow-lg'), 500);
+    }
+    // Update live results
+    renderSimulationResults();
+  }
+
+  function triggerMiningSimulation() {
+    const btn = document.getElementById('sim-btn');
+    const btnIcon = document.getElementById('sim-btn-icon');
+    const btnText = document.getElementById('sim-btn-text');
+    const progressBox = document.getElementById('sim-progress-box');
+    const progressBar = document.getElementById('sim-progress-bar');
+    const progressStatus = document.getElementById('sim-progress-status');
+    const progressPct = document.getElementById('sim-progress-pct');
+
+    // Disable button and show running state
+    btn.disabled = true;
+    btnIcon.className = 'spinner-border spinner-border-sm';
+    btnText.innerText = 'Mining...';
+    progressBox.classList.remove('d-none');
+    progressBar.style.width = '20%';
+    progressPct.innerText = '20%';
+    progressStatus.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> 1. Scanning customer transaction baskets in SQLite...';
+
+    setTimeout(() => {
+      progressBar.style.width = '60%';
+      progressPct.innerText = '60%';
+      progressStatus.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> 2. Pruning infrequent itemsets by Support threshold...';
+    }, 180);
+
+    setTimeout(() => {
+      progressBar.style.width = '90%';
+      progressPct.innerText = '90%';
+      progressStatus.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> 3. Deriving rules with Confidence &amp; Lift ranking...';
+    }, 360);
+
+    setTimeout(() => {
+      progressBar.style.width = '100%';
+      progressPct.innerText = '100%';
+      progressStatus.innerHTML = '<i class="bi bi-check-circle-fill text-success me-2"></i> Mining simulation complete!';
+
+      // Render results
+      renderSimulationResults();
+
+      // Reset button state
+      btn.disabled = false;
+      btnIcon.className = 'bi bi-arrow-repeat fs-6';
+      btnText.innerText = 'Re-Simulate';
+
+      // Hide progress box smoothly
+      setTimeout(() => {
+        progressBox.classList.add('d-none');
+        progressBar.style.width = '0%';
+      }, 700);
+
+      // Smooth scroll to results
+      const resultsArea = document.getElementById('sim-results');
+      if (resultsArea) {
+        resultsArea.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+
+      if (typeof showToast === 'function') {
+        showToast('Apriori rule simulation completed!', 'success');
+      }
+    }, 550);
+  }
+
+  function renderSimulationResults() {
     const select = document.getElementById('sim-product-select');
-    const selectedProduct = select.value;
+    if (!select) return;
+    const selectedProduct = select.value.trim();
+    const selectedOption = select.options[select.selectedIndex];
+    const selectedCategory = selectedOption ? selectedOption.getAttribute('data-category') : '';
+
+    const supportSlider = document.getElementById('sim-support-slider');
+    const confSlider = document.getElementById('sim-conf-slider');
+    const minSup = supportSlider ? parseFloat(supportSlider.value) : 0.03;
+    const minConf = confSlider ? parseFloat(confSlider.value) : 0.15;
+
     document.getElementById('sim-selected-name').innerText = selectedProduct;
+    document.getElementById('sim-active-sup').innerText = minSup.toFixed(3);
+    document.getElementById('sim-active-conf').innerText = `${Math.round(minConf * 100)}%`;
 
     const matchedRules = ALL_RULES.filter(r => {
-      const ants = r.antecedents.split(',').map(s => s.trim().toLowerCase());
-      return ants.includes(selectedProduct.toLowerCase());
+      const ants = (r.antecedents || '').split(',').map(s => s.trim().toLowerCase());
+      const isAntecedentMatch = ants.includes(selectedProduct.toLowerCase()) || 
+                                (r.antecedents || '').toLowerCase().includes(selectedProduct.toLowerCase());
+      const meetsSupport = r.support >= minSup;
+      const meetsConf = r.confidence >= minConf;
+      return isAntecedentMatch && meetsSupport && meetsConf;
     });
 
     const countBadge = document.getElementById('sim-rules-count');
     const container = document.getElementById('sim-rules-container');
-    countBadge.innerText = `${matchedRules.length} Rules Found`;
+    countBadge.innerText = `${matchedRules.length} Rule${matchedRules.length === 1 ? '' : 's'} Found`;
 
     if (matchedRules.length === 0) {
+      // Find category fallback products if available
+      const fallbackProducts = ALL_PRODUCTS.filter(p => 
+        p.category === selectedCategory && p.name.toLowerCase() !== selectedProduct.toLowerCase()
+      ).slice(0, 2);
+
+      let fallbackHtml = '';
+      if (fallbackProducts.length > 0) {
+        fallbackHtml = `
+          <div class="mt-4 pt-3 border-top">
+            <h6 class="fw-bold text-dark mb-3">
+              <i class="bi bi-arrow-repeat text-warning me-1"></i> Hybrid Cold Start Fallback: Top-Rated ${selectedCategory} Items
+            </h6>
+            <div class="row g-3">
+              ${fallbackProducts.map(fp => `
+                <div class="col-md-6">
+                  <div class="d-flex align-items-center gap-3 p-3 bg-white rounded-3 border shadow-sm">
+                    <img src="${fp.image || 'https://placehold.co/80x80'}" alt="${fp.name}" class="rounded-3" style="width: 60px; height: 60px; object-fit: cover;">
+                    <div class="flex-grow-1">
+                      <div class="fw-bold text-dark small text-truncate" style="max-width: 180px;">${fp.name}</div>
+                      <div class="text-primary fw-bold small">$${fp.price ? fp.price.toFixed(2) : ''}</div>
+                      <span class="badge bg-warning-subtle text-warning-emphasis small">&#9733; ${fp.rating || 4.5}</span>
+                    </div>
+                    <button class="btn btn-outline-primary btn-sm rounded-pill px-3" onclick="addToCart(${fp.id}, 1, event)">
+                      Add
+                    </button>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      }
+
       container.innerHTML = `
-        <div class="col-12 text-center py-4 text-muted">
-          <i class="bi bi-info-circle fs-3 d-block mb-2"></i>
-          No association rules directly generated for "${selectedProduct}" at the current minimum support (0.03) and confidence (0.15) thresholds.
-          The store will use Category Fallback recommendations for this product.
+        <div class="col-12 py-3">
+          <div class="alert alert-warning border-0 shadow-sm rounded-3 mb-0">
+            <div class="d-flex align-items-start gap-3">
+              <i class="bi bi-exclamation-triangle-fill fs-3 text-warning"></i>
+              <div>
+                <h6 class="fw-bold text-dark mb-1">No Association Rules Exceed Current Thresholds</h6>
+                <p class="small text-secondary mb-2">
+                  No transaction baskets for <strong>${selectedProduct}</strong> currently satisfy both <code>Support &ge; ${(minSup * 100).toFixed(1)}%</code> and <code>Confidence &ge; ${(minConf * 100).toFixed(0)}%</code>.
+                </p>
+                <button class="btn btn-outline-dark btn-sm rounded-pill" onclick="resetThresholds()">
+                  <i class="bi bi-arrow-counterclockwise me-1"></i> Reset Thresholds to Default
+                </button>
+              </div>
+            </div>
+            ${fallbackHtml}
+          </div>
         </div>
       `;
       return;
@@ -223,25 +414,92 @@
 
     let html = '';
     matchedRules.forEach(r => {
+      const liftBadgeClass = r.lift >= 3.0 ? 'bg-purple-subtle text-purple border' : (r.lift >= 1.5 ? 'bg-success-subtle text-success border' : 'bg-info-subtle text-info border');
+      const liftStyle = r.lift >= 3.0 ? 'background:#f3e8ff; color:#7e22ce; font-weight:700;' : '';
+
+      const productImage = r.consequent_image || 'https://placehold.co/120x120';
+      const productPrice = r.consequent_price ? `$${r.consequent_price.toFixed(2)}` : '';
+      const productRating = r.consequent_rating ? `&#9733; ${r.consequent_rating}` : '';
+      const productId = r.consequent_id || null;
+
       html += `
-        <div class="col-md-6">
-          <div class="p-3 bg-white rounded-3 border h-100 shadow-sm">
-            <div class="d-flex justify-content-between align-items-start mb-2">
-              <span class="badge bg-purple-subtle text-purple border small" style="background:#f3e8ff; color:#7e22ce;">
-                Lift: ${r.lift.toFixed(2)}x
-              </span>
-              <span class="text-success small fw-bold font-mono">Conf: ${(r.confidence * 100).toFixed(1)}%</span>
+        <div class="col-lg-6">
+          <div class="p-4 bg-white rounded-4 border h-100 shadow-sm d-flex flex-column justify-content-between">
+            <div>
+              <!-- Top Badges -->
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <span class="badge ${liftBadgeClass} px-3 py-1 font-mono" style="${liftStyle}">
+                  Lift: ${r.lift.toFixed(2)}x ${r.lift >= 3.0 ? '🔥 High Lift' : 'Positive Correlation'}
+                </span>
+                <span class="badge bg-success-subtle text-success border border-success-subtle font-mono small">
+                  Confidence: ${(r.confidence * 100).toFixed(1)}%
+                </span>
+              </div>
+
+              <!-- Rule Mathematical Statement -->
+              <div class="p-3 bg-light rounded-3 border mb-3 font-mono small">
+                <div class="text-muted small mb-1">Association Rule Equation:</div>
+                <div class="fw-bold text-dark">
+                  <span class="text-secondary">{${r.antecedents}}</span> 
+                  <span class="text-primary fw-extrabold mx-1">&rarr;</span> 
+                  <span class="text-success fw-bold">{${r.consequents}}</span>
+                </div>
+              </div>
+
+              <!-- Consequent Product Preview Card -->
+              <div class="d-flex align-items-center gap-3 p-3 bg-white rounded-3 border mb-3">
+                <img src="${productImage}" alt="${r.consequents}" class="rounded-3 shadow-xs" style="width: 72px; height: 72px; object-fit: cover;">
+                <div class="flex-grow-1 min-w-0">
+                  <span class="badge bg-light text-muted border small mb-1">${r.consequent_category || 'Recommended'}</span>
+                  <div class="fw-bold text-dark small text-truncate">${r.consequents}</div>
+                  <div class="d-flex align-items-center gap-2 mt-1">
+                    <span class="text-primary fw-bold">${productPrice}</span>
+                    ${productRating ? `<span class="badge bg-warning-subtle text-warning-emphasis small">${productRating}</span>` : ''}
+                  </div>
+                </div>
+                ${productId ? `
+                  <div class="d-flex flex-column gap-1">
+                    <button class="btn btn-primary btn-sm rounded-pill px-3 shadow-xs" onclick="addToCart(${productId}, 1, event)">
+                      <i class="bi bi-cart-plus me-1"></i> Add
+                    </button>
+                    <a href="/product/${productId}" class="btn btn-outline-secondary btn-xs rounded-pill px-2 text-center small text-decoration-none" style="font-size: 0.75rem;">
+                      View
+                    </a>
+                  </div>
+                ` : ''}
+              </div>
+
+              <!-- Mathematical Metric Meters -->
+              <div class="d-flex flex-column gap-2 mb-3">
+                <div>
+                  <div class="d-flex justify-content-between small text-muted mb-1">
+                    <span>Support Frequency P(A &cup; B):</span>
+                    <span class="font-mono fw-bold text-dark">${(r.support * 100).toFixed(1)}% (${r.support.toFixed(4)})</span>
+                  </div>
+                  <div class="progress" style="height: 5px;">
+                    <div class="progress-bar bg-info" style="width: ${Math.min(r.support * 500, 100)}%"></div>
+                  </div>
+                </div>
+
+                <div>
+                  <div class="d-flex justify-content-between small text-muted mb-1">
+                    <span>Confidence P(B | A):</span>
+                    <span class="font-mono fw-bold text-dark">${(r.confidence * 100).toFixed(1)}%</span>
+                  </div>
+                  <div class="progress" style="height: 5px;">
+                    <div class="progress-bar bg-success" style="width: ${r.confidence * 100}%"></div>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div class="fw-bold text-dark mb-1 font-mono small">
-              {${r.antecedents}} &rarr; <span class="text-primary">{${r.consequents}}</span>
+
+            <!-- Plain English Academic Explanation -->
+            <div class="pt-2 border-top mt-2">
+              <p class="text-muted small mb-0 leading-relaxed">
+                <i class="bi bi-info-circle text-primary me-1"></i>
+                <strong>Viva Insight:</strong> Customers who buy <em>${r.antecedents}</em> have a <strong>${(r.confidence * 100).toFixed(0)}%</strong> probability of buying <em>${r.consequents}</em>, which is <strong>${r.lift.toFixed(2)}x</strong> more frequent than random purchase chance.
+              </p>
             </div>
-            <div class="d-flex gap-2 mt-2">
-              <span class="metric-badge badge-support">Support: ${r.support.toFixed(3)}</span>
-              <span class="metric-badge badge-confidence">Confidence: ${(r.confidence * 100).toFixed(0)}%</span>
-            </div>
-            <p class="text-muted small mt-2 mb-0">
-              Interpretation: When a user buys <strong>${r.antecedents}</strong>, there is a <strong>${(r.confidence * 100).toFixed(0)}%</strong> chance they will purchase <strong>${r.consequents}</strong> (which is <strong>${r.lift.toFixed(2)}x</strong> more frequent than random chance).
-            </p>
           </div>
         </div>
       `;
@@ -250,7 +508,21 @@
     container.innerHTML = html;
   }
 
-  // Run on page load
-  document.addEventListener('DOMContentLoaded', runSimulation);
+  function resetThresholds() {
+    const supSlider = document.getElementById('sim-support-slider');
+    const confSlider = document.getElementById('sim-conf-slider');
+    if (supSlider) supSlider.value = 0.03;
+    if (confSlider) confSlider.value = 0.15;
+    updateSupportLabel(0.03);
+    updateConfLabel(0.15);
+    triggerMiningSimulation();
+  }
+
+  // Initial load
+  document.addEventListener('DOMContentLoaded', () => {
+    updateSupportLabel(0.03);
+    updateConfLabel(0.15);
+    renderSimulationResults();
+  });
 </script>
 {% endblock %}

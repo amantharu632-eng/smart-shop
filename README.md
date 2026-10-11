@@ -1,4 +1,4 @@
-# SmartShop – Shopping Recommendation System
+# Shopping Recommendation System
 > **A Complete Data Mining Mini Project using Flask, SQLite, and Association Rule Mining (Apriori Algorithm)**
 
 [![Python](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](https://www.python.org/)
@@ -11,7 +11,7 @@
 
 ## 1. Project Objective
 
-**SmartShop** demonstrates the practical application of **Data Mining** in modern e-commerce. Rather than displaying arbitrary or static recommendations, the platform implements **Association Rule Mining** powered by the **Apriori Algorithm** to analyze real customer transaction history and uncover hidden product purchase relationships (*Market Basket Analysis*).
+**Shopping Recommendation System** demonstrates the practical application of **Data Mining** in modern e-commerce. Rather than displaying arbitrary or static recommendations, the platform implements **Association Rule Mining** powered by the **Apriori Algorithm** to analyze real customer transaction history and uncover hidden product purchase relationships (*Market Basket Analysis*).
 
 ### Real-World Example
 If customer transaction records frequently contain:
@@ -78,7 +78,7 @@ The Data Mining engine is **fully functional, dynamic, and integrated with the d
 
 ## 4. How the Data Mining Recommendation System Works
 
-### The 7-Stage Pipeline
+### The 6-Stage Pipeline
 ```text
 Raw Transaction Data (SQLite / CSV)
         ↓
@@ -91,8 +91,6 @@ Frequent Itemsets Generation (Support ≥ min_support)
 Association Rule Mining (Confidence ≥ min_confidence, Lift ≥ min_lift)
         ↓
 Metric Ranking & Database Persistence (Saved to 'recommendations' table)
-        ↓
-Real-Time Delivery to Customer (Product Detail & Shopping Cart)
 ```
 
 ### Mathematical Definitions
@@ -147,7 +145,7 @@ smart shop/
 │   ├── login.html              # User authentication with quick demo autofill buttons
 │   ├── register.html           # New account registration
 │   ├── profile.html            # User profile, past orders, and shopping affinity
-│   ├── recommendations.html    # Academic 7-stage pipeline visualizer & rule simulator
+│   ├── recommendations.html    # Academic 6-stage pipeline visualizer & rule simulator
 │   ├── dashboard.html          # Data Mining KPI dashboard with Chart.js charts
 │   ├── rules.html              # Filterable association rules table with CSV export
 │   ├── admin.html              # Admin console (product CRUD & model retraining)
@@ -263,8 +261,8 @@ http://127.0.0.1:5000
 **Q2: Why is Lift more informative than Confidence alone?**
 > *Answer:* Confidence measures $P(B|A)$, but if product $B$ is extremely popular across all transactions (high baseline support), confidence might be high simply due to random chance. Lift normalizes confidence by the base probability of $B$ ($\text{Lift} = \frac{\text{Confidence}}{\text{Support}(B)}$). A Lift $> 1$ confirms a genuine positive correlation.
 
-**Q3: How does SmartShop address the Cold Start problem?**
-> *Answer:* When a newly added or infrequent product lacks association rules that meet minimum support thresholds, SmartShop gracefully activates a hybrid fallback, serving the highest-rated popular items within the same category.
+**Q3: How does the Shopping Recommendation System address the Cold Start problem?**
+> *Answer:* When a newly added or infrequent product lacks association rules that meet minimum support thresholds, the Shopping Recommendation System gracefully activates a hybrid fallback, serving the highest-rated popular items within the same category.
 
 ---
 
@@ -278,6 +276,6 @@ http://127.0.0.1:5000
 
 ## 12. Authors & Academic Credits
 
-- **Project Title:** SmartShop – Shopping Recommendation System
+- **Project Title:** Shopping Recommendation System
 - **Domain:** Data Mining / Knowledge Discovery in Databases (KDD) / Web Development
 - **Course:** Bachelor of Computer Science / Engineering Mini Project
